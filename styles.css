@@ -1,50 +1,6 @@
-/* Theme Name: Modish
-Theme URI: https://templatesjungle.com/
-Author: TemplatesJungle
-Author URI: https://templatesjungle.com/
-Description: Modish is specially designed product packaged for clothing eCommerce website.
-Version: 1.1 */
-/* --------------------------------------------------------------
-This is main CSS file that contains custom style rules used in this template
--------------------------------------------------------------- */
-/* ------------------------------------*\
-    Table of contents
-\*------------------------------------ */
-/* ------------------------------------------------
-
-CSS STRUCTURE:
-
-1. VARIABLES
-
-2. GENERAL TYPOGRAPHY
-  2.1 General Styles
-  2.2 Background Color
-  2.3 Section
-    - Section Paddings
-    - Section Margins
-    - Section Title
-  2.4 Buttons
-    - Buttons
-    - Button Hover Effect
-
-3. CONTENT ELEMENTS
-  - Dropdown
-  - Form
-  - Display
-  - Svg Color
-  - Swiper
-  - Modal Video
-  - Search Popup
-
-4. SITE STRUCTURE
-  4.1 Header Section
-  4.2 New-Arrival Section
-  4.3 Video Section
-
-
-/*--------------------------------------------------------------
-/** 1. VARIABLES
--------------------------------------------------------------- */
+/* ---------------------------------------------- */
+/* 1. VARIABLES */
+/* ---------------------------------------------- */
 :root {
     --primary-color: #111111;
     --secondary-color: #F9F6F3;
@@ -62,24 +18,18 @@ CSS STRUCTURE:
     --bs-body-color-rgb: 53, 53, 53;
     --bs-primary-rgb: 209, 104, 6;
     --bs-secondary-rgb: 249, 246, 243;
-}
 
-/* Fonts */
-:root {
+    /* Fonts */
     --body-font: "Jost", sans-serif;
     --heading-font: "Bodoni Moda", serif;
 }
 
 /* ---------------------------------------------- */
-/* 2 GENERAL TYPOGRAPHY
-  /*---------------------------------------------- */
-/* 2.1 General Styles
-  /*---------------------------------------------- */
+/* 2. GENERAL TYPOGRAPHY */
+/* ---------------------------------------------- */
 *,
-*::before,
-*::after {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
+*::before,
+*::after {
     box-sizing: border-box;
 }
 
@@ -91,7 +41,7 @@ body {
     font-family: var(--body-font);
     font-size: 16px;
     font-weight: 400;
-    line-height: 164%;
+    line-height: 1.64;
     letter-spacing: 0.32px;
     color: var(--dark-color);
     margin: 0;
@@ -107,8 +57,7 @@ a:hover {
     color: var(--primary-color);
 }
 
-/* 2.2 Background Color
-/*---------------------------------------------- */
+/* Background Colors */
 .bg-light {
     background-color: var(--light-color) !important;
 }
@@ -121,11 +70,7 @@ a:hover {
     background-color: var(--bs-gray-100) !important;
 }
 
-/* --------------------------------------------------------------
-  /** 2.3 Section
-  -------------------------------------------------------------- */
-/* - Section Padding
-  -------------------------------------------------------------- */
+/* Section Padding */
 .padding-small {
     padding-top: 5em;
     padding-bottom: 5em;
@@ -134,7 +79,6 @@ a:hover {
 .padding-medium {
     padding-top: 10em;
     padding-bottom: 10em;
-    height: -10px;
 }
 
 .padding-large {
@@ -153,8 +97,7 @@ a:hover {
     }
 }
 
-/* - Section Margin
-  -------------------------------------------------------------- */
+/* Section Margin */
 .margin-small {
     margin-top: 8.125em;
     margin-bottom: 8.125em;
@@ -170,14 +113,8 @@ a:hover {
     margin-bottom: 12em;
 }
 
-/* - Section Title
-  -------------------------------------------------------------- */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+/* Section Title */
+h1, h2, h3, h4, h5, h6 {
     color: var(--black-color);
     font-family: var(--heading-font);
     text-transform: uppercase;
@@ -189,28 +126,18 @@ h1,
     letter-spacing: 0.2rem;
 }
 
-/* --------------------------------------------------------------
-  /** 2.4 Buttons
-  -------------------------------------------------------------- */
-/* - Button
-  -------------------------------------------------------------- */
+/* Buttons */
 .btn {
-    --bs-btn-padding-x: 2.5rem;
-    --bs-btn-padding-y: 0.6rem;
-    --bs-btn-font-size: 14px;
-    --bs-btn-font-weight: 400;
     border-radius: 0;
     text-transform: uppercase;
     transition: all 0.4s ease-in-out;
     letter-spacing: 0.1rem;
 }
 
-/* - Button Hover Effect
-  -------------------------------------------------------------- */
 .btn1 {
     border: none;
     transition: 0.5s ease-in-out;
-    font-family: "Jost", sans-serif;
+    font-family: var(--body-font);
     font-size: 14px;
     font-weight: 500;
     letter-spacing: 3px;
@@ -237,95 +164,62 @@ h1,
     width: 100%;
 }
 
-/* --------------------------------------------------------------
-  /** 3.CONTENT ELEMENTS
-  -------------------------------------------------------------- */
-/* Dropdown
-  ------------------------------------------------------------- */
+/* Content Elements */
+/* Dropdown */
 .dropdown-item {
     color: var(--dark-color);
     text-transform: capitalize;
 }
 
 .dropdown-item.active,
-.dropdown-item:hover,
-.dropdown-item:active {
+.dropdown-item:hover,
+.dropdown-item:active {
     color: var(--dark-color);
     background-color: var(--secondary-color);
 }
 
-/* Form
-  ------------------------------------------------------------- */
+/* Form */
 .form-control:focus,
-.form-select:focus {
+.form-select:focus {
     border-color: var(--dark-color);
     outline: 0;
     box-shadow: none;
 }
 
 input,
-select,
-textarea {
+select,
+textarea {
     border-color: var(--dark-color);
     outline: 0;
     box-shadow: none;
 }
 
-select:focus {
-    box-shadow: none;
-}
-
-/* Display
-  ------------------------------------------------------------- */
-@media (min-width: 1200px) {
-    .display-1 {
-        font-size: 8rem;
-    }
-}
-
-/* Svg Color
-  ------------------------------------------------------------- */
-svg.light-color {
-    color: var(--light-color);
-}
-
-svg.dark-color {
-    color: var(--dark-color);
-}
-
-svg.primary-color {
-    color: var(--primary-color);
-}
-
-/* Swiper
-------------------------------------------------------------- */
-/* new arrival */
+/* Swiper */
 .main-slider-button-next.swiper-button-disabled,
-.main-slider-button-prev.swiper-button-disabled {
+.main-slider-button-prev.swiper-button-disabled {
     opacity: .35;
     cursor: auto;
     pointer-events: none;
 }
 
 .swiper-horizontal>.swiper-pagination-bullets .swiper-pagination-bullet,
-.swiper-pagination-horizontal.swiper-pagination-bullets .swiper-pagination-bullet {
+.swiper-pagination-horizontal.swiper-pagination-bullets .swiper-pagination-bullet {
     margin: 0 8px;
 }
 
 .testimonial-pagination .swiper-pagination-bullet,
-.new-arrival-pagination .swiper-pagination-bullet {
+.new-arrival-pagination .swiper-pagination-bullet {
     width: 12px;
     height: 12px;
     background-color: var(--primary-color);
 }
 
 .testimonial-pagination .swiper-pagination-bullet-active,
-.new-arrival-pagination .swiper-pagination-bullet-active {
+.new-arrival-pagination .swiper-pagination-bullet-active {
     background-color: var(--primary-color);
 }
 
-/* modal video override
-------------------------------------------------------------- */
+/* Modal Video */
 .modal-dialog {
     max-width: 800px;
     margin: auto;
@@ -341,8 +235,7 @@ svg.primary-color {
     border-radius: 0;
 }
 
-/* * Search Popup
--------------------------------------------------------------- */
+/* Search Popup */
 .search-popup {
     background-color: #fff;
     position: fixed;
@@ -353,19 +246,14 @@ svg.primary-color {
     opacity: 0;
     visibility: hidden;
     z-index: 9999;
-    -webkit-transition: opacity 0.3s 0s, visibility 0s 0.3s;
-    -moz-transition: opacity 0.3s 0s, visibility 0s 0.3s;
-    transition: opacity 0.3s 0s, visibility 0s 0.3s;
+    transition: opacity 0.3s, visibility 0s 0.3s;
 }
 
 .search-popup.is-visible {
     opacity: 1;
     visibility: visible;
-    cursor: -webkit-image-set(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23FFF' d='M20 1l-1-1-9 9-9-9-1 1 9 9-9 9 1 1 9-9 9 9 1-1-9-9'/%3E%3C/svg%3E") 1x, url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23000' d='M20 1l-1-1-9 9-9-9-1 1 9 9-9 9 1 1 9-9 9 9 1-1-9-9'/%3E%3C/svg%3E") 2x), pointer;
-    cursor: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23000' d='M20 1l-1-1-9 9-9-9-1 1 9 9-9 9 1 1 9-9 9 9 1-1-9-9'/%3E%3C/svg%3E"), pointer;
-    -webkit-transition: opacity 0.3s 0s, visibility 0s 0s;
-    -moz-transition: opacity 0.3s 0s, visibility 0s 0s;
-    transition: opacity 0.3s 0s, visibility 0s 0s;
+    cursor: pointer;
+    transition: opacity 0.3s, visibility 0s;
 }
 
 .search-popup-container {
@@ -378,18 +266,11 @@ svg.primary-color {
     max-width: 800px;
     text-align: center;
     box-shadow: none;
-    cursor: default;
-    -webkit-transform: translateY(-40px);
     transform: translateY(-40px);
-    -webkit-backface-visibility: hidden;
-    -webkit-transition-property: -webkit-transform;
-    transition-property: transform;
-    -webkit-transition-duration: 0.3s;
-    transition-duration: 0.3s;
+    transition: transform 0.3s;
 }
 
-.is-visible .search-popup-container {
-    -webkit-transform: translateY(-50%);
+.search-popup.is-visible .search-popup-container {
     transform: translateY(-50%);
 }
 
@@ -418,8 +299,6 @@ svg.primary-color {
 }
 
 .search-popup .search-popup-close:hover {
-    -webkit-transform: rotate(90deg);
-    -ms-transform: rotate(90deg);
     transform: rotate(90deg);
 }
 
@@ -461,7 +340,7 @@ svg.primary-color {
 }
 
 .search-popup .cat-list-item a::after {
-    background: none repeat scroll 0 0 #fff;
+    background: none;
     content: "";
     height: 1px;
     border-bottom: 1px solid #ff9697;
@@ -470,16 +349,13 @@ svg.primary-color {
     position: absolute;
     top: 100%;
     width: 100%;
-    -webkit-transition: height 0.3s, opacity 0.3s, -webkit-transform 0.3s;
     transition: height 0.3s, opacity 0.3s, transform 0.3s;
-    -webkit-transform: translateY(-5px);
     transform: translateY(-5px);
 }
 
 .search-popup .cat-list-item a:hover::after {
     height: 1px;
     opacity: 1;
-    -webkit-transform: translateY(2px);
     transform: translateY(2px);
 }
 
@@ -497,7 +373,7 @@ svg.primary-color {
 
 @media only screen and (max-width: 991px) {
     .search-popup .cat-list-item,
-      .search-popup-form .form-control {
+    .search-popup-form .form-control {
         font-size: 1.425em;
     }
 }
@@ -511,37 +387,12 @@ svg.primary-color {
 
 @media only screen and (max-width: 575px) {
     .search-popup .cat-list-item,
-      .search-popup-form .form-control {
+    .search-popup-form .form-control {
         font-size: 1.125em;
     }
-
-    .search-popup .search-popup-close {
-        top: 1em;
-        right: 1em;
-    }
 }
 
-.search-popup input[type="search"] {
-    font-size: 24px;
-    height: 60px;
-    padding: 26px;
-}
-
-.search-popup .search-form button {
-    top: 12px;
-    right: 15px;
-}
-
-.search-popup .search-form button svg {
-    height: 28px;
-    width: 28px;
-}
-
-/* ---------------------------------------------- */
-/* 4 SITE STRUCTURE */
-/* ---------------------------------------------- */
-/* * 4.1 Header Section Style
--------------------------------------------------------------- */
+/* Header Section Style */
 .navbar-toggler {
     color: white;
 }
@@ -557,7 +408,7 @@ svg.primary-color {
 .navbar-brand {
     font-family: 'Lora', serif;
     font-style: italic;
-    font-size: 38;
+    font-size: 38px;
     color: white;
 }
 
@@ -598,11 +449,10 @@ svg.primary-color {
 
 .nav-link-ltr:hover::before {
     width: 90%;
-    color: white;
+    background-color: white;
 }
 
-/* * 4.2 New-Arrival Section Style
--------------------------------------------------------------- */
+/* New-Arrival Section Style */
 .product-item .cart-concern {
     background: var(--light-color);
     width: 70%;
@@ -623,10 +473,9 @@ svg.primary-color {
     opacity: 1;
 }
 
-/* * 4.3 Video Section Style
--------------------------------------------------------------- */
+/* Video Section Style */
 .play,
-svg.play-icon {
+svg.play-icon {
     animation: play 1.5s alternate infinite ease-in;
 }
 
@@ -634,7 +483,6 @@ svg.primary-color {
     0% {
         transform: scale(1);
     }
-
     100% {
         transform: scale(1.1);
     }
