@@ -487,3 +487,39 @@ svg.play-icon {
         transform: scale(1.1);
     }
 }
+
+/* Basic reset and styling */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background-color: #f8f8f8;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+}
+
+.login-button {
+    margin-right: 20px;
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+}
+
+.header-audio {
+    display: block;
+    margin-left: 20px;
+}
+
+/* Optional: Adjustments to ensure the audio player fits well in the header */
+audio {
+    width: 200px; /* Adjust the width as needed */
+}
