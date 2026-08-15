@@ -3,79 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAYRGRND // SYSTEM OVERRIDE</title>
+    <title>FAYRGRND // Modern Decentralized Social</title>
     <style>
         :root {
-            --bg-black: #080808;
-            --bg-slate: #121316;
-            --card-slate: #1a1c23;
-            --neon-green: #39FF14;
-            --toxic-purple: #9D00FF;
-            --text-main: #E2E8F0;
-            --text-dim: #94A3B8;
+            --bg-base: #0a0b0e;
+            --surface-dark: #12151c;
+            --surface-card: #181c26;
+            --accent-purple: #8B5CF6;
+            --accent-purple-glow: rgba(139, 92, 246, 0.25);
+            --border-light: rgba(255, 255, 255, 0.08);
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Courier New', Courier, monospace;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
         }
 
         body {
-            background-color: var(--bg-black);
-            color: var(--text-main);
+            background-color: var(--bg-base);
+            color: var(--text-primary);
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* CRT Scanline Overlay */
-        .scanline {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(
-                rgba(18, 16, 16, 0) 50%, 
-                rgba(0, 0, 0, 0.25) 50%
-            );
-            background-size: 100% 4px;
-            z-index: 99;
-            pointer-events: none;
-            opacity: 0.6;
-        }
-
-        /* Navigation */
+        /* Fixed Minimal Header */
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.5rem 3rem;
-            background: rgba(18, 19, 22, 0.8);
-            backdrop-filter: blur(8px);
-            border-bottom: 2px solid var(--toxic-purple);
+            padding: 1.25rem 4rem;
+            background: rgba(10, 11, 14, 0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-light);
             position: fixed;
             width: 100%;
             top: 0;
-            z-index: 10;
+            z-index: 100;
         }
 
         .logo {
-            font-size: 1.8rem;
-            font-weight: 900;
-            letter-spacing: -1px;
-            color: #fff;
-            text-transform: uppercase;
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
 
         .logo span {
-            color: var(--neon-green);
+            color: var(--accent-purple);
         }
 
-        .nav-status {
+        .nav-tag {
             font-size: 0.8rem;
-            color: var(--neon-green);
-            border: 1px solid var(--neon-green);
-            padding: 4px 8px;
-            text-transform: uppercase;
-            box-shadow: 0 0 8px rgba(57, 255, 20, 0.3);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-light);
+            padding: 6px 12px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
         }
 
         /* Hero Section */
@@ -83,45 +69,47 @@
             min-height: 100vh;
             display: flex;
             align-items: center;
-            padding: 0 5%;
+            padding: 0 8%;
             position: relative;
-            background: radial-gradient(circle at 70% 50%, #1c0a2a 0%, var(--bg-black) 70%);
         }
 
         .hero-content {
-            max-width: 600px;
+            max-width: 640px;
             z-index: 2;
         }
 
-        .hero-tag {
-            color: var(--toxic-purple);
-            font-weight: bold;
-            letter-spacing: 2px;
-            margin-bottom: 1rem;
+        .badge {
             display: inline-block;
-            background: rgba(157, 0, 255, 0.1);
-            padding: 4px 10px;
-            border-left: 3px solid var(--toxic-purple);
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent-purple);
+            background: var(--accent-purple-glow);
+            padding: 6px 14px;
+            border-radius: 30px;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(139, 92, 246, 0.3);
         }
 
         h1 {
-            font-size: 3.5rem;
-            line-height: 1.1;
-            text-transform: uppercase;
+            font-size: 4rem;
+            line-height: 1.05;
+            letter-spacing: -1.5px;
+            font-weight: 800;
             margin-bottom: 1.5rem;
-            font-weight: 900;
         }
 
         h1 span {
-            color: var(--neon-green);
-            text-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
+            background: linear-gradient(135deg, #A78BFA 0%, #6D28D9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .hero p {
-            color: var(--text-dim);
-            font-size: 1.1rem;
+        p.hero-desc {
+            font-size: 1.2rem;
             line-height: 1.6;
-            margin-bottom: 2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            font-weight: 400;
         }
 
         .cta-group {
@@ -131,256 +119,214 @@
 
         .btn {
             padding: 1rem 2rem;
-            font-weight: bold;
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.2s ease;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
             cursor: pointer;
+            transition: all 0.25s ease;
+            text-decoration: none;
             border: none;
         }
 
         .btn-primary {
-            background-color: var(--neon-green);
-            color: #000;
-            box-shadow: 4px 4px 0px var(--toxic-purple);
+            background-color: var(--accent-purple);
+            color: #fff;
+            box-shadow: 0 8px 24px var(--accent-purple-glow);
         }
 
         .btn-primary:hover {
-            transform: translate(-2px, -2px);
-            box-shadow: 6px 6px 0px var(--toxic-purple);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(139, 92, 246, 0.4);
         }
 
         .btn-secondary {
-            background: transparent;
-            color: #fff;
-            border: 2px solid var(--toxic-purple);
+            background: var(--surface-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border-light);
         }
 
         .btn-secondary:hover {
-            background: var(--toxic-purple);
-            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
         }
 
-        /* 3D Canvas Container */
+        /* 3D Canvas Background Element */
         #canvas-container {
             position: absolute;
-            right: 0;
+            right: 5%;
             top: 0;
-            width: 50%;
+            width: 45%;
             height: 100%;
             z-index: 1;
         }
 
         /* Features Section */
         .features {
-            padding: 6rem 5%;
-            background-color: var(--bg-slate);
-            position: relative;
-            z-index: 2;
-            border-top: 1px solid #222;
+            padding: 8rem 8%;
+            background-color: var(--surface-dark);
+            border-top: 1px solid var(--border-light);
         }
 
-        .section-header {
-            margin-bottom: 4rem;
-        }
-
-        .section-header h2 {
+        .section-title {
             font-size: 2.5rem;
-            text-transform: uppercase;
+            letter-spacing: -1px;
+            margin-bottom: 1rem;
         }
 
-        .section-header h2 span {
-            color: var(--toxic-purple);
+        .section-sub {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 4rem;
+            max-width: 500px;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
         }
 
         .card {
-            background-color: var(--card-slate);
-            border: 1px solid #2a2d3d;
-            padding: 2rem;
-            position: relative;
-            transition: transform 0.2s, border-color 0.2s;
+            background-color: var(--surface-card);
+            border: 1px solid var(--border-light);
+            padding: 2.5rem;
+            border-radius: 20px;
+            transition: border-color 0.3s, transform 0.3s;
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            border-color: var(--neon-green);
+            border-color: var(--accent-purple);
+            transform: translateY(-4px);
         }
 
-        .card-code {
-            font-size: 0.75rem;
-            color: var(--neon-green);
-            margin-bottom: 1rem;
+        .card-num {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent-purple);
+            margin-bottom: 1.5rem;
             display: block;
         }
 
         .card h3 {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             margin-bottom: 1rem;
-            text-transform: uppercase;
+            letter-spacing: -0.5px;
         }
 
         .card p {
-            color: var(--text-dim);
+            color: var(--text-secondary);
+            line-height: 1.6;
             font-size: 0.95rem;
-            line-height: 1.5;
         }
 
-        /* Terminal Window Widget */
-        .terminal {
-            margin-top: 4rem;
-            background: #000;
-            border: 1px solid var(--toxic-purple);
-            padding: 1.5rem;
-            font-size: 0.85rem;
-            color: var(--neon-green);
-        }
-
-        .terminal-header {
-            color: var(--text-dim);
-            border-bottom: 1px solid #222;
-            padding-bottom: 0.5rem;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-        }
-
-        @media (max-width: 900px) {
-            .hero { flex-direction: column; justify-content: center; padding-top: 7rem; }
-            #canvas-container { position: relative; width: 100%; height: 300px; }
-            h1 { font-size: 2.5rem; }
-            .cta-group { flex-direction: column; }
+        @media (max-width: 960px) {
+            .hero { flex-direction: column; justify-content: center; padding-top: 8rem; }
+            #canvas-container { position: relative; width: 100%; height: 350px; right: 0; }
+            h1 { font-size: 2.75rem; }
+            nav { padding: 1rem 2rem; }
         }
     </style>
-    <!-- Three.js Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
 
-    <div class="scanline"></div>
-
     <nav>
         <div class="logo">FAYR<span>GRND</span></div>
-        <div class="nav-status">[ SYSTEM: UNFILTERED ]</div>
+        <div class="nav-tag">ON-LEDGER PROTOCOL</div>
     </nav>
 
     <section class="hero">
         <div class="hero-content">
-            <span class="hero-tag">// ANTI-ALGORITHM SOCIAL</span>
-            <h1>NO BOTS.<br>NO CENSORSHIP.<br><span>JUST REALITY.</span></h1>
-            <p>Mainstream social media is dead. Welcome to FAYRGRND—a rebellious digital space built for authentic self-expression, powered by real-time verification and zero fake metrics.</p>
+            <span class="badge">DECENTRALIZED SOCIAL</span>
+            <h1>THE BITCOIN OF <span>SOCIAL MEDIA.</span></h1>
+            <p class="hero-desc">Zero fake accounts. Immutable verification on the ledger. Be opinionated, be blunt, or be supportive—your Star Rating and Honour Level reflect strictly who you are.</p>
             <div class="cta-group">
-                <button class="btn btn-primary">JOIN THE REVOLUTION</button>
-                <button class="btn btn-secondary">VERIFY IDENTITY</button>
+                <button class="btn btn-primary">JOIN THE NETWORK</button>
+                <button class="btn btn-secondary">EXPLORE LEDGER</button>
             </div>
         </div>
         <div id="canvas-container"></div>
     </section>
 
     <section class="features">
-        <div class="section-header">
-            <h2>SYSTEM <span>PROTOCOL</span></h2>
-        </div>
+        <h2 class="section-title">BUILT ON INTEGRITY.</h2>
+        <p class="section-sub">A platform structured like a protocol—transparent, unalterable, and honest.</p>
 
         <div class="grid">
             <div class="card">
-                <span class="card-code">SYS_01 // IDENTITY</span>
-                <h3>PROTOCOL: NUGGET</h3>
-                <p>Real-time AI identity verification backed by human moderation. One account per individual. No bots, no duplicate personas, no synthetic engagement.</p>
+                <span class="card-num">01 // VERIFICATION</span>
+                <h3>One Person. One Identity.</h3>
+                <p> verified real-time by AI and human checks. No bots, no duplicate profiles, and no synthetic engagement. Everything ties back to real ledger identity.</p>
             </div>
 
             <div class="card">
-                <span class="card-code">SYS_02 // REPUTATION</span>
-                <h3>HERO OR VILLAIN</h3>
-                <p>No forced conformity or fake politeness. Honour Levels and Star Ratings reflect your genuine actions and community integrity. Be real, get judged by your values.</p>
+                <span class="card-num">02 // REPUTATION</span>
+                <h3>Unfiltered Honour Levels</h3>
+                <p>Say what you want. Be argumentative or stand your ground—your Star Rating and Honour Level adapt dynamically to your actions without platform censorship.</p>
             </div>
 
             <div class="card">
-                <span class="card-code">SYS_03 // COMMUNITIES</span>
-                <h3>CREWS HUB</h3>
-                <p>One crew per interest, monitored by Nugget to end feed clutter. Filter by reputation and dive straight into focused, non-redundant discussions.</p>
+                <span class="card-num">03 // ARCHITECTURE</span>
+                <h3>Focused Communities</h3>
+                <p>Dedicated topic crews eliminate duplicate feeds and endless scrolling, ensuring relevant discussions backed by real profile ratings.</p>
             </div>
-
-            <div class="card">
-                <span class="card-code">SYS_04 // REAL WORLD</span>
-                <h3>IRL LINK-UP</h3>
-                <p>Take it offline. Coordinate real-world meetups—from street sessions to music events—filtered by verified user ratings for safe, genuine connections.</p>
-            </div>
-        </div>
-
-        <div class="terminal">
-            <div class="terminal-header">STATUS LOGS // FAYRGRND NETWORK</div>
-            <p>> [SYS_OK]: BOT_COUNT = 0</p>
-            <p>> [VERIFIED]: HUMAN_AUTHENTICITY = 100%</p>
-            <p>> [NETWORK]: CENSORSHIP_FILTER = DISABLED</p>
-            <p>> [ACTION]: AWAITING USER INPUT...</p>
         </div>
     </section>
 
     <script>
-        // --- Interactive 3D Canvas (Three.js) ---
+        // --- Sleek 3D Node (Three.js) ---
         const container = document.getElementById('canvas-container');
         const scene = new THREE.Scene();
-        
-        const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-        camera.position.z = 3.5;
+
+        const camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 1000);
+        camera.position.z = 4;
 
         const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
         renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         container.appendChild(renderer.domElement);
 
-        // Create a stylized 3D low-poly wireframe object
-        const geometry = new THREE.IcosahedronGeometry(1.6, 1);
-        const material = new THREE.MeshBasicMaterial({
-            color: 0x39FF14,
+        // Core geometric node representing the ledger structure
+        const geometry = new THREE.TorusKnotGeometry(1, 0.3, 128, 32);
+        const material = new THREE.MeshStandardMaterial({
+            color: 0x8B5CF6,
+            roughness: 0.2,
+            metalness: 0.8,
             wireframe: true
         });
-        const mesh = new THREE.Mesh(geometry, material);
-        scene.add(mesh);
+        const knot = new THREE.Mesh(geometry, material);
+        scene.add(knot);
 
-        // Add inner core
-        const coreGeo = new THREE.IcosahedronGeometry(0.8, 0);
-        const coreMat = new THREE.MeshBasicMaterial({
-            color: 0x9D00FF,
-            wireframe: false
-        });
-        const coreMesh = new THREE.Mesh(coreGeo, coreMat);
-        scene.add(coreMesh);
+        // Ambient and directional lighting for metallic edge
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
 
-        // Interactive mouse rotation tracking
-        let mouseX = 0;
-        let mouseY = 0;
+        const dirLight = new THREE.DirectionalLight(0xA78BFA, 1.5);
+        dirLight.position.set(5, 5, 5);
+        scene.add(dirLight);
+
+        // Smooth interactive movement
+        let targetX = 0;
+        let targetY = 0;
 
         document.addEventListener('mousemove', (e) => {
-            mouseX = (e.clientX / window.innerWidth) - 0.5;
-            mouseY = (e.clientY / window.innerHeight) - 0.5;
+            targetX = (e.clientX / window.innerWidth) - 0.5;
+            targetY = (e.clientY / window.innerHeight) - 0.5;
         });
 
-        // Animation Loop
         function animate() {
             requestAnimationFrame(animate);
 
-            mesh.rotation.x += 0.005;
-            mesh.rotation.y += 0.008;
+            knot.rotation.x += 0.003;
+            knot.rotation.y += 0.005;
 
-            coreMesh.rotation.x -= 0.008;
-            coreMesh.rotation.y -= 0.005;
-
-            // Smooth mouse follow effect
-            mesh.rotation.y += mouseX * 0.05;
-            mesh.rotation.x += mouseY * 0.05;
+            knot.rotation.y += (targetX - knot.rotation.y) * 0.05;
+            knot.rotation.x += (targetY - knot.rotation.x) * 0.05;
 
             renderer.render(scene, camera);
         }
 
         animate();
 
-        // Responsive Resizing
         window.addEventListener('resize', () => {
             const width = container.clientWidth;
             const height = container.clientHeight;
