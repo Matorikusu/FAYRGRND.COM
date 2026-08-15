@@ -1,514 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAYRGRND // App Prototype</title>
-    <style>
-        :root {
-            --bg-base: #0a0b0e;
-            --surface-dark: #12151c;
-            --surface-card: #181c26;
-            --surface-subcard: #0f1117;
-            --accent-purple: #8B5CF6;
-            --accent-purple-glow: rgba(139, 92, 246, 0.25);
-            --cyan-accent: #00f2ff;
-            --gold-accent: #ffb700;
-            --border-light: rgba(255, 255, 255, 0.08);
-            --text-primary: #F8FAFC;
-            --text-secondary: #94A3B8;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAYRGRND - Mobile Profile</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Theme Presets */
+    .theme-purple { --theme-accent: #8b5cf6; --theme-glow: rgba(139, 92, 246, 0.25); }
+    .theme-cyan   { --theme-accent: #00f2ff; --theme-glow: rgba(0, 242, 255, 0.25); }
+    .theme-gold   { --theme-accent: #ffb700; --theme-glow: rgba(255, 183, 0, 0.25); }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-base);
-            color: var(--text-primary);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 1.5rem 1rem;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* Mobile Container Frame */
-        .app-frame {
-            width: 100%;
-            max-width: 400px;
-            height: 820px;
-            background: var(--surface-dark);
-            border: 1px solid var(--border-light);
-            border-radius: 40px;
-            overflow: hidden;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px var(--accent-purple-glow);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        /* Top Header */
-        .app-header {
-            background: rgba(18, 21, 28, 0.8);
-            backdrop-filter: blur(12px);
-            padding: 1rem 1.25rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-light);
-            z-index: 10;
-        }
-
-        .header-logo {
-            font-weight: 800;
-            text-transform: uppercase;
-            font-size: 1rem;
-            letter-spacing: -0.5px;
-        }
-
-        .header-logo span {
-            color: var(--accent-purple);
-        }
-
-        .header-status {
-            font-size: 0.7rem;
-            color: var(--cyan-accent);
-            border: 1px solid var(--cyan-accent);
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-weight: 600;
-        }
-
-        /* Scrollable Page Body */
-        .app-viewport {
-            flex: 1;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        /* Views (Pages) */
-        .tab-view {
-            display: none;
-            padding: 1rem;
-            animation: fadeIn 0.25s ease-in-out forwards;
-        }
-
-        .tab-view.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Card System */
-        .card {
-            background: var(--surface-card);
-            border: 1px solid var(--border-light);
-            border-radius: 18px;
-            padding: 1.25rem;
-            margin-bottom: 0.85rem;
-        }
-
-        .card-title {
-            font-size: 0.75rem;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            color: var(--text-secondary);
-            margin-bottom: 0.75rem;
-        }
-
-        /* PROFILE VIEW STYLES */
-        .profile-identity {
-            text-align: center;
-            background-image: radial-gradient(var(--accent-purple-glow) 1px, transparent 0);
-            background-size: 14px 14px;
-        }
-
-        .avatar-wrap {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-        }
-
-        .badge-side {
-            color: var(--gold-accent);
-            font-weight: 900;
-            font-size: 0.85rem;
-            font-style: italic;
-        }
-
-        .avatar-circle {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            border: 2px solid var(--gold-accent);
-            background: url('https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150') center/cover;
-            margin: 0 auto;
-        }
-
-        .user-name {
-            font-size: 1.25rem;
-            font-weight: 800;
-            color: var(--text-primary);
-            margin-top: 0.25rem;
-        }
-
-        .user-handle {
-            color: var(--accent-purple);
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .linkups-count {
-            color: var(--text-secondary);
-            font-size: 0.8rem;
-            margin: 0.25rem 0 0.5rem 0;
-        }
-
-        .stars-row {
-            color: var(--gold-accent);
-            font-size: 1rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .honour-section {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-            font-size: 0.65rem;
-            font-weight: 800;
-        }
-
-        .honour-track {
-            flex: 1;
-            height: 6px;
-            background: #ef4444;
-            border-radius: 3px;
-            position: relative;
-        }
-
-        .honour-thumb {
-            position: absolute;
-            right: 30%;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: var(--cyan-accent);
-            box-shadow: 0 0 8px var(--cyan-accent);
-        }
-
-        .traits-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0.5rem;
-            text-align: center;
-        }
-
-        .trait-item {
-            background: var(--surface-subcard);
-            border: 1px solid var(--border-light);
-            border-radius: 12px;
-            padding: 0.5rem;
-        }
-
-        .trait-icon { font-size: 1.2rem; color: var(--cyan-accent); }
-        .trait-name { font-size: 0.7rem; font-weight: 700; margin-top: 2px; }
-        .trait-level { font-size: 0.6rem; color: var(--text-secondary); }
-
-        .achievement-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.4rem 0;
-            border-bottom: 1px solid var(--border-light);
-            font-size: 0.75rem;
-        }
-
-        .checkbox-group { display: flex; gap: 4px; }
-        .box {
-            width: 14px;
-            height: 14px;
-            border-radius: 3px;
-            background: var(--surface-subcard);
-            border: 1px solid var(--border-light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.55rem;
-        }
-        .box.checked { background: var(--accent-purple); border-color: var(--accent-purple); color: #fff; }
-
-        /* CREWS & REACH OUT LIST STYLES */
-        .list-item {
-            background: var(--surface-subcard);
-            border: 1px solid var(--border-light);
-            border-radius: 12px;
-            padding: 0.85rem;
-            margin-bottom: 0.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .list-info h4 { font-size: 0.9rem; margin-bottom: 2px; }
-        .list-info p { font-size: 0.75rem; color: var(--text-secondary); }
-
-        .btn-sm {
-            background: var(--accent-purple);
-            color: #fff;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        /* Navigation Bar */
-        .app-nav {
-            background: rgba(18, 21, 28, 0.9);
-            backdrop-filter: blur(12px);
-            border-top: 1px solid var(--border-light);
-            padding: 0.85rem 0.5rem;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-        }
-
-        .nav-btn {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            transition: color 0.2s;
-        }
-
-        .nav-btn .icon { font-size: 1.1rem; }
-
-        .nav-btn.active {
-            color: var(--accent-purple);
-        }
-    </style>
+    .accent-border { border-color: var(--theme-accent); }
+    .accent-bg     { background-color: var(--theme-accent); }
+    .accent-glow   { box-shadow: 0 0 20px var(--theme-glow); }
+    .accent-text   { color: var(--theme-accent); }
+  </style>
 </head>
-<body>
+<body class="bg-[#0a0b0e] text-slate-100 flex justify-center min-h-screen">
 
-    <div class="app-frame">
-        <!-- Persistent App Header -->
-        <div class="app-header">
-            <div class="header-logo">FAYR<span>GRND</span></div>
-            <div class="header-status">LEDGER VERIFIED</div>
+  <!-- Mobile View Container -->
+  <main className="w-full max-w-[420px] bg-[#0f1117] min-h-screen flex flex-col p-4 border-x border-slate-800">
+    
+    <!-- Top Bar -->
+    <header className="flex justify-between items-center py-3 mb-4 border-b border-slate-800">
+      <h1 className="text-xl font-black tracking-wider">FAYR<span className="accent-text">GRND</span></h1>
+      <span id="wallet-badge" className="text-[10px] font-mono bg-slate-800 text-slate-300 px-2 py-1 rounded-md border border-slate-700">
+        0x71C...4f92
+      </span>
+    </header>
+
+    <!-- Profile Card (Dynamic Theme Shell) -->
+    <section id="profile-card" className="theme-purple accent-border accent-glow bg-[#181c26] p-5 rounded-2xl border transition-all duration-300 mb-6">
+      
+      <!-- Avatar & Basic Info -->
+      <div className="flex items-center gap-4 mb-4">
+        <div className="relative">
+          <div className="w-16 h-16 rounded-full bg-slate-700 flex items-center justify-center font-bold text-2xl border-2 accent-border">
+            J
+          </div>
+          <span className="absolute bottom-0 right-0 w-4 h-4 bg-emerald-500 border-2 border-[#181c26] rounded-full"></span>
         </div>
-
-        <!-- Dynamic Viewport -->
-        <div class="app-viewport">
-            
-            <!-- 1. PROFILE TAB -->
-            <div id="tab-profile" class="tab-view active">
-                <div class="card profile-identity">
-                    <div class="avatar-wrap">
-                        <span class="badge-side">LEGEND</span>
-                        <div class="avatar-circle"></div>
-                        <span class="badge-side">LEGEND</span>
-                    </div>
-
-                    <div class="user-name">Nugget</div>
-                    <div class="user-handle">@nugget</div>
-                    <div class="linkups-count">🔗 221 LINK-UPS</div>
-
-                    <div class="stars-row">★ ★ ★ ★ ☆</div>
-
-                    <div class="honour-section">
-                        <span style="color: #ef4444;">PRICK</span>
-                        <div class="honour-track">
-                            <div class="honour-thumb"></div>
-                        </div>
-                        <span style="color: var(--cyan-accent);">HERO</span>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-title">TOP TRAITS</div>
-                    <div class="traits-grid">
-                        <div class="trait-item">
-                            <div class="trait-icon">⚡</div>
-                            <div class="trait-name">Charismatic</div>
-                            <div class="trait-level">LV.4</div>
-                        </div>
-                        <div class="trait-item">
-                            <div class="trait-icon">👁</div>
-                            <div class="trait-name">Empathetic</div>
-                            <div class="trait-level">LV.3</div>
-                        </div>
-                        <div class="trait-item">
-                            <div class="trait-icon">💡</div>
-                            <div class="trait-name">Intelligent</div>
-                            <div class="trait-level">LV.3</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-title">ON-LEDGER ACHIEVEMENTS</div>
-                    <div class="achievement-row">
-                        <span>First On-Chain Post</span>
-                        <div class="checkbox-group"><div class="box checked">✓</div></div>
-                    </div>
-                    <div class="achievement-row">
-                        <span>Real World Link-Up</span>
-                        <div class="checkbox-group"><div class="box checked">✓</div><div class="box checked">✓</div></div>
-                    </div>
-                    <div class="achievement-row">
-                        <span>Community Leader</span>
-                        <div class="checkbox-group"><div class="box checked">✓</div><div class="box"></div></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 2. CREWS TAB -->
-            <div id="tab-crews" class="tab-view">
-                <div class="card">
-                    <div class="card-title">SINGLE-TOPIC CREWS</div>
-                    <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1rem;">
-                        One dedicated crew per topic. No duplicated feeds or algorithmic doomscrolling.
-                    </p>
-
-                    <div class="list-item">
-                        <div class="list-info">
-                            <h4>🛹 Skate & Street</h4>
-                            <p>1,420 Verified Members</p>
-                        </div>
-                        <button class="btn-sm">ENTER</button>
-                    </div>
-
-                    <div class="list-item">
-                        <div class="list-info">
-                            <h4>🏋️ Gym & Fitness</h4>
-                            <p>890 Verified Members</p>
-                        </div>
-                        <button class="btn-sm">ENTER</button>
-                    </div>
-
-                    <div class="list-item">
-                        <div class="list-info">
-                            <h4>🎵 Underground Music</h4>
-                            <p>2,100 Verified Members</p>
-                        </div>
-                        <button class="btn-sm">ENTER</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 3. REACH OUT TAB -->
-            <div id="tab-reachout" class="tab-view">
-                <div class="card">
-                    <div class="card-title">PUBLIC REACH OUTS</div>
-                    <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1rem;">
-                        Meet verified locals in real life. Set minimum rating criteria to keep interactions real.
-                    </p>
-
-                    <div class="list-item">
-                        <div class="list-info">
-                            <h4>Cinema (Night)</h4>
-                            <p>Min Stars: ★★★☆☆</p>
-                        </div>
-                        <button class="btn-sm">JOIN</button>
-                    </div>
-
-                    <div class="list-item">
-                        <div class="list-info">
-                            <h4>Football (Noon)</h4>
-                            <p>Min Stars: ★★☆☆☆</p>
-                        </div>
-                        <button class="btn-sm">JOIN</button>
-                    </div>
-
-                    <div class="list-item">
-                        <div class="list-info">
-                            <h4>Coffee / Chat</h4>
-                            <p>Min Stars: ★★★★☆</p>
-                        </div>
-                        <button class="btn-sm">JOIN</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 4. LINK UPS TAB -->
-            <div id="tab-linkups" class="tab-view">
-                <div class="card">
-                    <div class="card-title">ACTIVE LINK-UPS</div>
-                    <div class="list-item">
-                        <div class="list-info">
-                            <h4>Pharrell</h4>
-                            <p>Status: Confirmed • Today 4:00 PM</p>
-                        </div>
-                        <button class="btn-sm" style="background: var(--cyan-accent); color: #000;">MAP</button>
-                    </div>
-                    <div class="list-item">
-                        <div class="list-info">
-                            <h4>Harley</h4>
-                            <p>Status: Pending Approval</p>
-                        </div>
-                        <button class="btn-sm" style="background: var(--surface-subcard); border: 1px solid var(--border-light);">VIEW</button>
-                    </div>
-                </div>
-            </div>
-
+        <div>
+          <h2 className="font-bold text-lg">Joe_Pioneer</h2>
+          <p className="text-xs text-slate-400">Pioneer Class • Level 1</p>
         </div>
+      </div>
 
-        <!-- Interactive Bottom Tab Navigation -->
-        <div class="app-nav">
-            <button class="nav-btn active" onclick="switchTab('tab-profile', this)">
-                <span class="icon">👤</span>
-                <span>Profile</span>
-            </button>
-            <button class="nav-btn" onclick="switchTab('tab-crews', this)">
-                <span class="icon">⚡</span>
-                <span>Crews</span>
-            </button>
-            <button class="nav-btn" onclick="switchTab('tab-reachout', this)">
-                <span class="icon">📡</span>
-                <span>Reach Out</span>
-            </button>
-            <button class="nav-btn" onclick="switchTab('tab-linkups', this)">
-                <span class="icon">🔗</span>
-                <span>Link-Ups</span>
-            </button>
+      <!-- Bio Inputs -->
+      <div className="mb-4">
+        <label className="block text-[10px] font-bold tracking-wider text-slate-400 mb-1">PERSONA BIO</label>
+        <textarea id="bio-input" className="w-full bg-[#0a0b0e] border border-slate-700 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none focus:border-slate-500 resize-none">Building the next decentralized hub. Testing micro-interactions.</textarea>
+      </div>
+
+      <!-- Theme Selector (Customisation Shop Preview) -->
+      <div>
+        <label className="block text-[10px] font-bold tracking-wider text-slate-400 mb-2">EQUIPPED THEME</label>
+        <div className="grid grid-cols-3 gap-2">
+          <button onclick="setTheme('theme-purple')" className="py-2 text-[11px] font-bold rounded-lg border border-slate-700 bg-purple-950/40 text-purple-300 hover:border-purple-500">
+            Purple
+          </button>
+          <button onclick="setTheme('theme-cyan')" className="py-2 text-[11px] font-bold rounded-lg border border-slate-700 bg-cyan-950/40 text-cyan-300 hover:border-cyan-400">
+            Cyan
+          </button>
+          <button onclick="setTheme('theme-gold')" className="py-2 text-[11px] font-bold rounded-lg border border-slate-700 bg-amber-950/40 text-amber-300 hover:border-amber-400">
+            Gold
+          </button>
         </div>
-    </div>
+      </div>
+    </section>
 
-    <script>
-        function switchTab(tabId, btnElement) {
-            // Hide all tab views
-            const views = document.querySelectorAll('.tab-view');
-            views.forEach(view => view.classList.remove('active'));
+    <!-- Save Action (Simulated Micro-Fee Execution) -->
+    <button onclick="saveProfile()" className="accent-bg text-black font-extrabold py-3.5 rounded-xl text-xs uppercase tracking-wider hover:opacity-90 transition-opacity mt-auto">
+      Save Profile ($0.001 Fee)
+    </button>
 
-            // Deactivate all nav buttons
-            const buttons = document.querySelectorAll('.nav-btn');
-            buttons.forEach(btn => btn.classList.remove('active'));
+    <!-- Console Log for Test Verification -->
+    <p id="status-log" className="text-[10px] text-center font-mono text-slate-500 mt-3"></p>
+  </main>
 
-            // Activate target view & button
-            document.getElementById(tabId).classList.add('active');
-            btnElement.classList.add('active');
-        }
-    </script>
+  <script>
+    function setTheme(themeName) {
+      const card = document.getElementById('profile-card');
+      card.className = `${themeName} accent-border accent-glow bg-[#181c26] p-5 rounded-2xl border transition-all duration-300 mb-6`;
+      document.getElementById('status-log').innerText = `Theme switched to: ${themeName}`;
+    }
+
+    function saveProfile() {
+      const bio = document.getElementById('bio-input').value;
+      document.getElementById('status-log').innerText = `Profile Saved! Fee executed on-chain.`;
+      console.log("Updated Profile Bio:", bio);
+    }
+  </script>
 </body>
 </html>
