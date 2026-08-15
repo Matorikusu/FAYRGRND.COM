@@ -3,94 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAYRGRND // Profile Layout</title>
+    <title>FAYRGRND // App Prototype</title>
     <style>
         :root {
-            --bg-outer: #0d0d0e;
-            --surface-card: #18191c;
-            --surface-subcard: #121315;
+            --bg-base: #0a0b0e;
+            --surface-dark: #12151c;
+            --surface-card: #181c26;
+            --surface-subcard: #0f1117;
+            --accent-purple: #8B5CF6;
+            --accent-purple-glow: rgba(139, 92, 246, 0.25);
             --cyan-accent: #00f2ff;
-            --purple-header: #8a00ff;
             --gold-accent: #ffb700;
-            --text-main: #ffffff;
-            --text-muted: #8e9297;
-            --border-card: #26282e;
+            --border-light: rgba(255, 255, 255, 0.08);
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
         }
 
         body {
-            background-color: var(--bg-outer);
-            color: var(--text-main);
+            background-color: var(--bg-base);
+            color: var(--text-primary);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 1rem;
+            padding: 1.5rem 1rem;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* Mobile Phone Wrapper Frame */
+        /* Mobile Container Frame */
         .app-frame {
             width: 100%;
-            max-width: 390px;
-            background: var(--bg-outer);
-            border: 1px solid #2a2b30;
-            border-radius: 36px;
+            max-width: 400px;
+            height: 820px;
+            background: var(--surface-dark);
+            border: 1px solid var(--border-light);
+            border-radius: 40px;
             overflow: hidden;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px var(--accent-purple-glow);
+            display: flex;
+            flex-direction: column;
             position: relative;
         }
 
         /* Top Header */
         .app-header {
-            background: var(--purple-header);
-            padding: 1rem;
+            background: rgba(18, 21, 28, 0.8);
+            backdrop-filter: blur(12px);
+            padding: 1rem 1.25rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-
-        .header-icon {
-            font-size: 1.2rem;
-            color: #fff;
-            cursor: pointer;
+            border-bottom: 1px solid var(--border-light);
+            z-index: 10;
         }
 
         .header-logo {
-            font-weight: 900;
+            font-weight: 800;
             text-transform: uppercase;
-            font-size: 1.1rem;
+            font-size: 1rem;
             letter-spacing: -0.5px;
-            text-align: center;
-            line-height: 1;
         }
 
-        /* Profile Scroll Content */
-        .profile-content {
-            padding: 0.75rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
+        .header-logo span {
+            color: var(--accent-purple);
         }
 
-        /* Main Identity Card */
-        .identity-card {
-            background: var(--surface-card);
-            border: 1px solid var(--border-card);
-            border-radius: 16px;
-            padding: 1.25rem 1rem;
-            text-align: center;
+        .header-status {
+            font-size: 0.7rem;
+            color: var(--cyan-accent);
+            border: 1px solid var(--cyan-accent);
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        /* Scrollable Page Body */
+        .app-viewport {
+            flex: 1;
+            overflow-y: auto;
             position: relative;
-            background-image: radial-gradient(rgba(255, 183, 0, 0.05) 1px, transparent 0);
-            background-size: 12px 12px;
         }
 
-        .profile-avatar-wrap {
+        /* Views (Pages) */
+        .tab-view {
+            display: none;
+            padding: 1rem;
+            animation: fadeIn 0.25s ease-in-out forwards;
+        }
+
+        .tab-view.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Card System */
+        .card {
+            background: var(--surface-card);
+            border: 1px solid var(--border-light);
+            border-radius: 18px;
+            padding: 1.25rem;
+            margin-bottom: 0.85rem;
+        }
+
+        .card-title {
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        /* PROFILE VIEW STYLES */
+        .profile-identity {
+            text-align: center;
+            background-image: radial-gradient(var(--accent-purple-glow) 1px, transparent 0);
+            background-size: 14px 14px;
+        }
+
+        .avatar-wrap {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -100,73 +142,44 @@
         .badge-side {
             color: var(--gold-accent);
             font-weight: 900;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             font-style: italic;
-            letter-spacing: 0.5px;
         }
 
         .avatar-circle {
-            width: 90px;
-            height: 90px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             border: 2px solid var(--gold-accent);
-            background-color: #000;
-            background-image: url('https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150');
-            background-size: cover;
-            background-position: center;
+            background: url('https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150') center/cover;
             margin: 0 auto;
         }
 
         .user-name {
-            font-size: 1.3rem;
+            font-size: 1.25rem;
             font-weight: 800;
-            color: var(--gold-accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
+            color: var(--text-primary);
             margin-top: 0.25rem;
         }
 
-        .verified-icon {
-            font-size: 0.8rem;
-            background: var(--gold-accent);
-            color: #000;
-            padding: 1px 3px;
-            border-radius: 4px;
-            font-weight: bold;
-        }
-
         .user-handle {
-            color: var(--text-main);
-            font-size: 0.9rem;
+            color: var(--accent-purple);
+            font-size: 0.85rem;
             font-weight: 600;
         }
 
         .linkups-count {
-            color: var(--text-muted);
+            color: var(--text-secondary);
             font-size: 0.8rem;
             margin: 0.25rem 0 0.5rem 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
         }
 
         .stars-row {
-            color: var(--cyan-accent);
-            font-size: 1.1rem;
-            letter-spacing: 2px;
+            color: var(--gold-accent);
+            font-size: 1rem;
             margin-bottom: 0.75rem;
         }
 
-        .stars-row .score {
-            color: var(--text-muted);
-            font-size: 0.75rem;
-            margin-left: 4px;
-        }
-
-        /* Honour Slider */
         .honour-section {
             display: flex;
             align-items: center;
@@ -174,50 +187,26 @@
             gap: 8px;
             font-size: 0.65rem;
             font-weight: 800;
-            letter-spacing: 0.5px;
-            padding: 0 0.5rem;
         }
 
         .honour-track {
             flex: 1;
-            height: 4px;
-            background: #ff4d4d;
-            border-radius: 2px;
+            height: 6px;
+            background: #ef4444;
+            border-radius: 3px;
             position: relative;
         }
 
         .honour-thumb {
             position: absolute;
-            right: 25%;
+            right: 30%;
             top: 50%;
             transform: translateY(-50%);
-            width: 14px;
-            height: 14px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
             background: var(--cyan-accent);
             box-shadow: 0 0 8px var(--cyan-accent);
-        }
-
-        /* Card Section Titles */
-        .card-title {
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            text-align: center;
-            margin-bottom: 0.75rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
-
-        /* Top Traits Grid */
-        .traits-card {
-            background: var(--surface-card);
-            border: 1px solid var(--border-card);
-            border-radius: 16px;
-            padding: 1rem;
         }
 
         .traits-grid {
@@ -228,233 +217,298 @@
         }
 
         .trait-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
+            background: var(--surface-subcard);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 0.5rem;
         }
 
-        .trait-icon {
-            font-size: 1.4rem;
-            color: var(--cyan-accent);
-        }
-
-        .trait-name {
-            font-size: 0.75rem;
-            font-weight: 700;
-        }
-
-        .trait-level {
-            font-size: 0.65rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-        }
-
-        /* Achievements Checklist */
-        .achievements-card {
-            background: var(--surface-card);
-            border: 1px solid var(--border-card);
-            border-radius: 16px;
-            padding: 1rem;
-        }
-
-        .achievements-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.75rem;
-        }
-
-        .achievements-header .percent {
-            color: var(--text-muted);
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
+        .trait-icon { font-size: 1.2rem; color: var(--cyan-accent); }
+        .trait-name { font-size: 0.7rem; font-weight: 700; margin-top: 2px; }
+        .trait-level { font-size: 0.6rem; color: var(--text-secondary); }
 
         .achievement-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0.4rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid var(--border-light);
             font-size: 0.75rem;
-            color: var(--text-main);
         }
 
-        .checkbox-group {
-            display: flex;
-            gap: 4px;
-        }
-
+        .checkbox-group { display: flex; gap: 4px; }
         .box {
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             border-radius: 3px;
-            border: 1px solid #333;
             background: var(--surface-subcard);
+            border: 1px solid var(--border-light);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.6rem;
-            color: #000;
+            font-size: 0.55rem;
         }
+        .box.checked { background: var(--accent-purple); border-color: var(--accent-purple); color: #fff; }
 
-        .box.checked {
-            background: var(--cyan-accent);
-            border-color: var(--cyan-accent);
-            font-weight: bold;
-        }
-
-        /* App Bottom Navigation Bar */
-        .app-nav {
-            background: var(--surface-card);
-            border-top: 1px solid var(--border-card);
-            padding: 0.75rem 1rem;
+        /* CREWS & REACH OUT LIST STYLES */
+        .list-item {
+            background: var(--surface-subcard);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 0.85rem;
+            margin-bottom: 0.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .nav-item {
-            color: var(--text-muted);
-            font-size: 0.65rem;
-            font-weight: 800;
-            text-transform: uppercase;
+        .list-info h4 { font-size: 0.9rem; margin-bottom: 2px; }
+        .list-info p { font-size: 0.75rem; color: var(--text-secondary); }
+
+        .btn-sm {
+            background: var(--accent-purple);
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
         }
 
-        .nav-item.active {
-            color: var(--text-main);
+        /* Navigation Bar */
+        .app-nav {
+            background: rgba(18, 21, 28, 0.9);
+            backdrop-filter: blur(12px);
+            border-top: 1px solid var(--border-light);
+            padding: 0.85rem 0.5rem;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            transition: color 0.2s;
+        }
+
+        .nav-btn .icon { font-size: 1.1rem; }
+
+        .nav-btn.active {
+            color: var(--accent-purple);
         }
     </style>
 </head>
 <body>
 
     <div class="app-frame">
-        <!-- App Header -->
+        <!-- Persistent App Header -->
         <div class="app-header">
-            <span class="header-icon">⚙</span>
-            <div class="header-logo">FAYR<br>GRND</div>
-            <span class="header-icon" style="opacity: 0;">⚙</span>
+            <div class="header-logo">FAYR<span>GRND</span></div>
+            <div class="header-status">LEDGER VERIFIED</div>
         </div>
 
-        <div class="profile-content">
-            <!-- Identity Profile Card -->
-            <div class="identity-card">
-                <div class="profile-avatar-wrap">
-                    <span class="badge-side">LEGEND</span>
-                    <div class="avatar-circle"></div>
-                    <span class="badge-side">LEGEND</span>
-                </div>
-
-                <div class="user-name">
-                    Nugget <span class="verified-icon">FAYR</span>
-                </div>
-                <div class="user-handle">@nugget</div>
-                <div class="linkups-count">🔗 - 221</div>
-
-                <div class="stars-row">
-                    ★ ★ ★ ★ ☆ <span class="score">3.92</span>
-                </div>
-
-                <div class="honour-section">
-                    <span style="color: var(--text-muted);">VILLAIN</span>
-                    <div class="honour-track">
-                        <div class="honour-thumb"></div>
+        <!-- Dynamic Viewport -->
+        <div class="app-viewport">
+            
+            <!-- 1. PROFILE TAB -->
+            <div id="tab-profile" class="tab-view active">
+                <div class="card profile-identity">
+                    <div class="avatar-wrap">
+                        <span class="badge-side">LEGEND</span>
+                        <div class="avatar-circle"></div>
+                        <span class="badge-side">LEGEND</span>
                     </div>
-                    <span style="color: var(--text-muted);">HERO</span>
-                </div>
-            </div>
 
-            <!-- Top Traits Section -->
-            <div class="traits-card">
-                <div class="card-title">TOP TRAITS</div>
-                <div class="traits-grid">
-                    <div class="trait-item">
-                        <div class="trait-icon">☆</div>
-                        <div class="trait-name">Charismatic</div>
-                        <div class="trait-level">LV.4</div>
-                    </div>
-                    <div class="trait-item">
-                        <div class="trait-icon">🤖</div>
-                        <div class="trait-name">Empathetic</div>
-                        <div class="trait-level">LV.3</div>
-                    </div>
-                    <div class="trait-item">
-                        <div class="trait-icon">💡</div>
-                        <div class="trait-name">Intelligent</div>
-                        <div class="trait-level">LV.3</div>
-                    </div>
-                </div>
-            </div>
+                    <div class="user-name">Nugget</div>
+                    <div class="user-handle">@nugget</div>
+                    <div class="linkups-count">🔗 221 LINK-UPS</div>
 
-            <!-- Achievements Section -->
-            <div class="achievements-card">
-                <div class="achievements-header">
-                    <span class="card-title" style="margin: 0;">ACHIEVEMENTS</span>
-                    <span class="percent">39.5%</span>
-                </div>
+                    <div class="stars-row">★ ★ ★ ★ ☆</div>
 
-                <div class="achievement-row">
-                    <span>Create your first post.</span>
-                    <div class="checkbox-group">
-                        <div class="box checked">✓</div>
+                    <div class="honour-section">
+                        <span style="color: #ef4444;">PRICK</span>
+                        <div class="honour-track">
+                            <div class="honour-thumb"></div>
+                        </div>
+                        <span style="color: var(--cyan-accent);">HERO</span>
                     </div>
                 </div>
 
-                <div class="achievement-row">
-                    <span>Commenter</span>
-                    <div class="checkbox-group">
-                        <div class="box checked">✓</div>
-                        <div class="box"></div>
-                        <div class="box"></div>
+                <div class="card">
+                    <div class="card-title">TOP TRAITS</div>
+                    <div class="traits-grid">
+                        <div class="trait-item">
+                            <div class="trait-icon">⚡</div>
+                            <div class="trait-name">Charismatic</div>
+                            <div class="trait-level">LV.4</div>
+                        </div>
+                        <div class="trait-item">
+                            <div class="trait-icon">👁</div>
+                            <div class="trait-name">Empathetic</div>
+                            <div class="trait-level">LV.3</div>
+                        </div>
+                        <div class="trait-item">
+                            <div class="trait-icon">💡</div>
+                            <div class="trait-name">Intelligent</div>
+                            <div class="trait-level">LV.3</div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="achievement-row">
-                    <span>Hella Reactions</span>
-                    <div class="checkbox-group">
-                        <div class="box checked">✓</div>
-                        <div class="box checked">✓</div>
-                        <div class="box"></div>
+                <div class="card">
+                    <div class="card-title">ON-LEDGER ACHIEVEMENTS</div>
+                    <div class="achievement-row">
+                        <span>First On-Chain Post</span>
+                        <div class="checkbox-group"><div class="box checked">✓</div></div>
                     </div>
-                </div>
-
-                <div class="achievement-row">
-                    <span>Community Leader</span>
-                    <div class="checkbox-group">
-                        <div class="box checked">✓</div>
-                        <div class="box"></div>
-                        <div class="box"></div>
+                    <div class="achievement-row">
+                        <span>Real World Link-Up</span>
+                        <div class="checkbox-group"><div class="box checked">✓</div><div class="box checked">✓</div></div>
                     </div>
-                </div>
-
-                <div class="achievement-row">
-                    <span>First LinkUp</span>
-                    <div class="checkbox-group">
-                        <div class="box checked">✓</div>
-                    </div>
-                </div>
-
-                <div class="achievement-row">
-                    <span>Social Butterfly</span>
-                    <div class="checkbox-group">
-                        <div class="box checked">✓</div>
-                        <div class="box checked">✓</div>
-                        <div class="box"></div>
+                    <div class="achievement-row">
+                        <span>Community Leader</span>
+                        <div class="checkbox-group"><div class="box checked">✓</div><div class="box"></div></div>
                     </div>
                 </div>
             </div>
+
+            <!-- 2. CREWS TAB -->
+            <div id="tab-crews" class="tab-view">
+                <div class="card">
+                    <div class="card-title">SINGLE-TOPIC CREWS</div>
+                    <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                        One dedicated crew per topic. No duplicated feeds or algorithmic doomscrolling.
+                    </p>
+
+                    <div class="list-item">
+                        <div class="list-info">
+                            <h4>🛹 Skate & Street</h4>
+                            <p>1,420 Verified Members</p>
+                        </div>
+                        <button class="btn-sm">ENTER</button>
+                    </div>
+
+                    <div class="list-item">
+                        <div class="list-info">
+                            <h4>🏋️ Gym & Fitness</h4>
+                            <p>890 Verified Members</p>
+                        </div>
+                        <button class="btn-sm">ENTER</button>
+                    </div>
+
+                    <div class="list-item">
+                        <div class="list-info">
+                            <h4>🎵 Underground Music</h4>
+                            <p>2,100 Verified Members</p>
+                        </div>
+                        <button class="btn-sm">ENTER</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. REACH OUT TAB -->
+            <div id="tab-reachout" class="tab-view">
+                <div class="card">
+                    <div class="card-title">PUBLIC REACH OUTS</div>
+                    <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                        Meet verified locals in real life. Set minimum rating criteria to keep interactions real.
+                    </p>
+
+                    <div class="list-item">
+                        <div class="list-info">
+                            <h4>Cinema (Night)</h4>
+                            <p>Min Stars: ★★★☆☆</p>
+                        </div>
+                        <button class="btn-sm">JOIN</button>
+                    </div>
+
+                    <div class="list-item">
+                        <div class="list-info">
+                            <h4>Football (Noon)</h4>
+                            <p>Min Stars: ★★☆☆☆</p>
+                        </div>
+                        <button class="btn-sm">JOIN</button>
+                    </div>
+
+                    <div class="list-item">
+                        <div class="list-info">
+                            <h4>Coffee / Chat</h4>
+                            <p>Min Stars: ★★★★☆</p>
+                        </div>
+                        <button class="btn-sm">JOIN</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. LINK UPS TAB -->
+            <div id="tab-linkups" class="tab-view">
+                <div class="card">
+                    <div class="card-title">ACTIVE LINK-UPS</div>
+                    <div class="list-item">
+                        <div class="list-info">
+                            <h4>Pharrell</h4>
+                            <p>Status: Confirmed • Today 4:00 PM</p>
+                        </div>
+                        <button class="btn-sm" style="background: var(--cyan-accent); color: #000;">MAP</button>
+                    </div>
+                    <div class="list-item">
+                        <div class="list-info">
+                            <h4>Harley</h4>
+                            <p>Status: Pending Approval</p>
+                        </div>
+                        <button class="btn-sm" style="background: var(--surface-subcard); border: 1px solid var(--border-light);">VIEW</button>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
-        <!-- Bottom Navigation Bar -->
+        <!-- Interactive Bottom Tab Navigation -->
         <div class="app-nav">
-            <span class="nav-item">☠</span>
-            <span class="nav-item">crews</span>
-            <span class="nav-item">reach out</span>
-            <span class="nav-item">link ups</span>
-            <span class="nav-item active">S</span>
+            <button class="nav-btn active" onclick="switchTab('tab-profile', this)">
+                <span class="icon">👤</span>
+                <span>Profile</span>
+            </button>
+            <button class="nav-btn" onclick="switchTab('tab-crews', this)">
+                <span class="icon">⚡</span>
+                <span>Crews</span>
+            </button>
+            <button class="nav-btn" onclick="switchTab('tab-reachout', this)">
+                <span class="icon">📡</span>
+                <span>Reach Out</span>
+            </button>
+            <button class="nav-btn" onclick="switchTab('tab-linkups', this)">
+                <span class="icon">🔗</span>
+                <span>Link-Ups</span>
+            </button>
         </div>
     </div>
 
+    <script>
+        function switchTab(tabId, btnElement) {
+            // Hide all tab views
+            const views = document.querySelectorAll('.tab-view');
+            views.forEach(view => view.classList.remove('active'));
+
+            // Deactivate all nav buttons
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Activate target view & button
+            document.getElementById(tabId).classList.add('active');
+            btnElement.classList.add('active');
+        }
+    </script>
 </body>
 </html>
