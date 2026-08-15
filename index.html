@@ -13,6 +13,7 @@
             --accent-purple: #8B5CF6;
             --accent-purple-glow: rgba(139, 92, 246, 0.25);
             --cyan-accent: #00f2ff;
+            --cyan-glow: rgba(0, 242, 255, 0.2);
             --gold-accent: #ffb700;
             --border-light: rgba(255, 255, 255, 0.08);
             --text-primary: #F8FAFC;
@@ -33,13 +34,13 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Fixed Minimal Header */
+        /* Fixed Navigation */
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 1.25rem 4rem;
-            background: rgba(10, 11, 14, 0.7);
+            background: rgba(10, 11, 14, 0.85);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border-light);
             position: fixed;
@@ -50,21 +51,37 @@
 
         .logo {
             font-size: 1.25rem;
-            font-weight: 700;
+            font-weight: 800;
             letter-spacing: -0.5px;
         }
 
-        .logo span {
-            color: var(--accent-purple);
+        .logo span { color: var(--accent-purple); }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
         }
 
-        .nav-tag {
-            font-size: 0.8rem;
+        .nav-links a {
             color: var(--text-secondary);
-            border: 1px solid var(--border-light);
-            padding: 6px 12px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--text-primary); }
+
+        .nav-tag {
+            font-size: 0.75rem;
+            color: var(--cyan-accent);
+            border: 1px solid var(--cyan-accent);
+            padding: 4px 12px;
             border-radius: 20px;
             letter-spacing: 0.5px;
+            font-weight: 700;
         }
 
         /* Hero Section */
@@ -73,13 +90,13 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 6rem 8% 2rem 8%;
+            padding: 7rem 8% 4rem 8%;
             position: relative;
             gap: 2rem;
         }
 
         .hero-content {
-            max-width: 580px;
+            max-width: 560px;
             z-index: 2;
         }
 
@@ -114,13 +131,9 @@
             line-height: 1.6;
             color: var(--text-secondary);
             margin-bottom: 2.5rem;
-            font-weight: 400;
         }
 
-        .cta-group {
-            display: flex;
-            gap: 1rem;
-        }
+        .cta-group { display: flex; gap: 1rem; }
 
         .btn {
             padding: 1rem 2rem;
@@ -150,11 +163,9 @@
             border: 1px solid var(--border-light);
         }
 
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.05); }
 
-        /* Interactive Phone Frame Container */
+        /* App Prototype Component */
         .hero-app-container {
             position: relative;
             z-index: 2;
@@ -165,8 +176,8 @@
         }
 
         .app-frame {
-            width: 360px;
-            height: 720px;
+            width: 350px;
+            height: 680px;
             background: var(--surface-dark);
             border: 1px solid var(--border-light);
             border-radius: 36px;
@@ -174,10 +185,8 @@
             box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px var(--accent-purple-glow);
             display: flex;
             flex-direction: column;
-            position: relative;
         }
 
-        /* App Internal Header */
         .app-header {
             background: rgba(18, 21, 28, 0.8);
             backdrop-filter: blur(12px);
@@ -186,53 +195,22 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid var(--border-light);
-            z-index: 10;
         }
 
-        .app-header-logo {
-            font-weight: 800;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-            letter-spacing: -0.5px;
-            line-height: 1;
-        }
+        .app-header-logo { font-weight: 800; font-size: 0.9rem; }
+        .app-header-logo span { color: var(--accent-purple); }
+        .app-header-status { font-size: 0.65rem; color: var(--cyan-accent); border: 1px solid var(--cyan-accent); padding: 2px 6px; border-radius: 10px; }
 
-        .app-header-logo span {
-            color: var(--accent-purple);
-        }
+        .app-viewport { flex: 1; overflow-y: auto; position: relative; }
 
-        .app-header-status {
-            font-size: 0.65rem;
-            color: var(--cyan-accent);
-            border: 1px solid var(--cyan-accent);
-            padding: 2px 6px;
-            border-radius: 10px;
-            font-weight: 600;
-        }
-
-        /* Scrollable App Viewport */
-        .app-viewport {
-            flex: 1;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        .tab-view {
-            display: none;
-            padding: 0.85rem;
-            animation: fadeIn 0.25s ease-in-out forwards;
-        }
-
-        .tab-view.active {
-            display: block;
-        }
+        .tab-view { display: none; padding: 0.85rem; animation: fadeIn 0.25s ease-in-out forwards; }
+        .tab-view.active { display: block; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(6px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* App Component Cards */
         .app-card {
             background: var(--surface-card);
             border: 1px solid var(--border-light);
@@ -251,268 +229,141 @@
             text-align: center;
         }
 
-        /* App Profile View Styles */
-        .profile-identity {
-            text-align: center;
-            background-image: radial-gradient(var(--accent-purple-glow) 1px, transparent 0);
-            background-size: 12px 12px;
-        }
+        .profile-identity { text-align: center; }
+        .avatar-wrap { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+        .badge-side { color: var(--gold-accent); font-weight: 900; font-size: 0.75rem; font-style: italic; }
+        .avatar-circle { width: 64px; height: 64px; border-radius: 50%; border: 2px solid var(--gold-accent); background: url('https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150') center/cover; margin: 0 auto; }
+        .user-name { font-size: 1.1rem; font-weight: 800; margin-top: 0.25rem; }
+        .user-handle { color: var(--accent-purple); font-size: 0.8rem; font-weight: 600; }
+        .linkups-count { color: var(--text-secondary); font-size: 0.75rem; margin: 0.2rem 0 0.4rem 0; }
+        .stars-row { color: var(--gold-accent); font-size: 0.9rem; margin-bottom: 0.65rem; }
 
-        .avatar-wrap {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-        }
+        .honour-section { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 0.6rem; font-weight: 800; }
+        .honour-track { flex: 1; height: 4px; background: #ef4444; border-radius: 2px; position: relative; }
+        .honour-thumb { position: absolute; right: 30%; top: 50%; transform: translateY(-50%); width: 10px; height: 10px; border-radius: 50%; background: var(--cyan-accent); box-shadow: 0 0 6px var(--cyan-accent); }
 
-        .badge-side {
-            color: var(--gold-accent);
-            font-weight: 900;
-            font-size: 0.75rem;
-            font-style: italic;
-        }
-
-        .avatar-circle {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            border: 2px solid var(--gold-accent);
-            background: url('https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150') center/cover;
-            margin: 0 auto;
-        }
-
-        .user-name {
-            font-size: 1.1rem;
-            font-weight: 800;
-            color: var(--text-primary);
-            margin-top: 0.25rem;
-        }
-
-        .user-handle {
-            color: var(--accent-purple);
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .linkups-count {
-            color: var(--text-secondary);
-            font-size: 0.75rem;
-            margin: 0.2rem 0 0.4rem 0;
-        }
-
-        .stars-row {
-            color: var(--gold-accent);
-            font-size: 0.9rem;
-            margin-bottom: 0.65rem;
-        }
-
-        .honour-section {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-            font-size: 0.6rem;
-            font-weight: 800;
-        }
-
-        .honour-track {
-            flex: 1;
-            height: 4px;
-            background: #ef4444;
-            border-radius: 2px;
-            position: relative;
-        }
-
-        .honour-thumb {
-            position: absolute;
-            right: 30%;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--cyan-accent);
-            box-shadow: 0 0 6px var(--cyan-accent);
-        }
-
-        .traits-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0.4rem;
-            text-align: center;
-        }
-
-        .trait-item {
-            background: var(--surface-subcard);
-            border: 1px solid var(--border-light);
-            border-radius: 10px;
-            padding: 0.4rem;
-        }
-
+        .traits-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem; text-align: center; }
+        .trait-item { background: var(--surface-subcard); border: 1px solid var(--border-light); border-radius: 10px; padding: 0.4rem; }
         .trait-icon { font-size: 1rem; color: var(--cyan-accent); }
         .trait-name { font-size: 0.65rem; font-weight: 700; margin-top: 2px; }
         .trait-level { font-size: 0.55rem; color: var(--text-secondary); }
 
-        .achievement-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.35rem 0;
-            border-bottom: 1px solid var(--border-light);
-            font-size: 0.7rem;
-        }
-
+        .achievement-row { display: flex; justify-content: space-between; align-items: center; padding: 0.35rem 0; border-bottom: 1px solid var(--border-light); font-size: 0.7rem; }
         .checkbox-group { display: flex; gap: 3px; }
-        .box {
-            width: 12px;
-            height: 12px;
-            border-radius: 2px;
-            background: var(--surface-subcard);
-            border: 1px solid var(--border-light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.5rem;
-        }
+        .box { width: 12px; height: 12px; border-radius: 2px; background: var(--surface-subcard); border: 1px solid var(--border-light); display: flex; align-items: center; justify-content: center; font-size: 0.5rem; }
         .box.checked { background: var(--accent-purple); border-color: var(--accent-purple); color: #fff; }
 
-        /* App List Component Styles */
-        .app-list-item {
-            background: var(--surface-subcard);
+        .app-list-item { background: var(--surface-subcard); border: 1px solid var(--border-light); border-radius: 10px; padding: 0.75rem; margin-bottom: 0.4rem; display: flex; justify-content: space-between; align-items: center; }
+        .app-list-info h4 { font-size: 0.8rem; margin-bottom: 2px; }
+        .app-list-info p { font-size: 0.65rem; color: var(--text-secondary); }
+        .app-btn-sm { background: var(--accent-purple); color: #fff; border: none; padding: 5px 10px; border-radius: 6px; font-size: 0.65rem; font-weight: 700; cursor: pointer; }
+
+        .app-nav { background: rgba(18, 21, 28, 0.9); backdrop-filter: blur(12px); border-top: 1px solid var(--border-light); padding: 0.65rem 0.25rem; display: flex; justify-content: space-around; align-items: center; }
+        .app-nav-btn { background: none; border: none; color: var(--text-secondary); font-size: 0.6rem; font-weight: 700; text-transform: uppercase; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+        .app-nav-btn .icon { font-size: 0.95rem; }
+        .app-nav-btn.active { color: var(--accent-purple); }
+
+        #canvas-container { position: absolute; left: 0; top: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+
+        /* Feature Highlight Sections (Deep-Dive layout) */
+        .feature-section {
+            padding: 7rem 8%;
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+        }
+
+        .feature-section:nth-child(even) {
+            flex-direction: row-reverse;
+            background: var(--surface-dark);
+        }
+
+        .feature-text { flex: 1; }
+        .feature-tag { font-size: 0.8rem; font-weight: 800; color: var(--cyan-accent); letter-spacing: 1px; margin-bottom: 0.5rem; display: block; }
+        .feature-title { font-size: 2.25rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 1rem; }
+        .feature-desc { color: var(--text-secondary); line-height: 1.7; font-size: 1.05rem; margin-bottom: 1.5rem; }
+
+        .feature-preview-box {
+            flex: 1;
+            background: var(--surface-card);
             border: 1px solid var(--border-light);
-            border-radius: 10px;
-            padding: 0.75rem;
-            margin-bottom: 0.4rem;
+            border-radius: 24px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .feature-preview-box::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; width: 150px; height: 150px;
+            background: radial-gradient(circle, var(--accent-purple-glow) 0%, transparent 70%);
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            padding: 7rem 8%;
+            background-color: var(--surface-dark);
+            border-top: 1px solid var(--border-light);
+        }
+
+        .section-header { text-align: center; margin-bottom: 4rem; }
+        .section-title { font-size: 2.5rem; letter-spacing: -1px; margin-bottom: 0.5rem; }
+        .section-sub { color: var(--text-secondary); font-size: 1.1rem; }
+
+        .faq-grid { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 1rem; }
+
+        .faq-item {
+            background: var(--surface-card);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 1.25rem 1.5rem;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .faq-item:hover { border-color: var(--accent-purple); }
+
+        .faq-question {
+            font-size: 1.1rem;
+            font-weight: 700;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .app-list-info h4 { font-size: 0.8rem; margin-bottom: 2px; }
-        .app-list-info p { font-size: 0.65rem; color: var(--text-secondary); }
-
-        .app-btn-sm {
-            background: var(--accent-purple);
-            color: #fff;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 6px;
-            font-size: 0.65rem;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        /* App Bottom Navigation Bar */
-        .app-nav {
-            background: rgba(18, 21, 28, 0.9);
-            backdrop-filter: blur(12px);
-            border-top: 1px solid var(--border-light);
-            padding: 0.65rem 0.25rem;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-        }
-
-        .app-nav-btn {
-            background: none;
-            border: none;
+        .faq-answer {
             color: var(--text-secondary);
-            font-size: 0.6rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-            transition: color 0.2s;
-        }
-
-        .app-nav-btn .icon { font-size: 0.95rem; }
-
-        .app-nav-btn.active {
-            color: var(--accent-purple);
-        }
-
-        /* 3D Canvas Background Element */
-        #canvas-container {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        /* Landing Features Section */
-        .features {
-            padding: 8rem 8%;
-            background-color: var(--surface-dark);
-            border-top: 1px solid var(--border-light);
-            position: relative;
-            z-index: 2;
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            letter-spacing: -1px;
-            margin-bottom: 1rem;
-        }
-
-        .section-sub {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            margin-bottom: 4rem;
-            max-width: 500px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .card {
-            background-color: var(--surface-card);
-            border: 1px solid var(--border-light);
-            padding: 2.5rem;
-            border-radius: 20px;
-            transition: border-color 0.3s, transform 0.3s;
-        }
-
-        .card:hover {
-            border-color: var(--accent-purple);
-            transform: translateY(-4px);
-        }
-
-        .card-num {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--accent-purple);
-            margin-bottom: 1.5rem;
-            display: block;
-        }
-
-        .card h3 {
-            font-size: 1.4rem;
-            margin-bottom: 1rem;
-            letter-spacing: -0.5px;
-        }
-
-        .card p {
-            color: var(--text-secondary);
-            line-height: 1.6;
             font-size: 0.95rem;
+            line-height: 1.6;
+            margin-top: 0.75rem;
+            display: none;
+        }
+
+        .faq-item.open .faq-answer { display: block; }
+        .faq-item.open .faq-toggle { transform: rotate(45deg); }
+        .faq-toggle { font-size: 1.2rem; transition: transform 0.2s; color: var(--accent-purple); }
+
+        /* Footer */
+        footer {
+            padding: 3rem 8%;
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
         }
 
         @media (max-width: 960px) {
-            .hero { flex-direction: column; justify-content: center; padding-top: 7rem; text-align: center; }
+            .hero { flex-direction: column; text-align: center; padding-top: 7rem; }
             .hero-content { max-width: 100%; }
             .cta-group { justify-content: center; }
-            h1 { font-size: 2.75rem; }
+            .feature-section, .feature-section:nth-child(even) { flex-direction: column; text-align: center; padding: 4rem 8%; }
             nav { padding: 1rem 2rem; }
-            .hero-app-container { margin-top: 2rem; }
+            .nav-links { display: none; }
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -521,6 +372,13 @@
 
     <nav>
         <div class="logo">FAYR<span>GRND</span></div>
+        <ul class="nav-links">
+            <li><a href="#identity">Identity</a></li>
+            <li><a href="#crews">Crews</a></li>
+            <li><a href="#reachout">Reach Out</a></li>
+            <li><a href="#linkups">Link-Ups</a></li>
+            <li><a href="#faq">FAQ</a></li>
+        </ul>
         <div class="nav-tag">ON-LEDGER PROTOCOL</div>
     </nav>
 
@@ -530,26 +388,23 @@
         <div class="hero-content">
             <span class="badge">DECENTRALIZED SOCIAL</span>
             <h1>THE BITCOIN OF <span>SOCIAL MEDIA.</span></h1>
-            <p class="hero-desc">Zero fake accounts. Immutable verification on the ledger. Be opinionated, be blunt, or be supportive—your Star Rating and Honour Level reflect strictly who you are.</p>
+            <p class="hero-desc">Zero fake accounts. Immutable verification on the ledger. Be opinionated, blunt, or supportive—your Star Rating and Honour Level reflect strictly who you are.</p>
             <div class="cta-group">
                 <button class="btn btn-primary">JOIN THE NETWORK</button>
                 <button class="btn btn-secondary">EXPLORE LEDGER</button>
             </div>
         </div>
 
-        <!-- Interactive App Prototype Frame -->
+        <!-- Interactive Phone Component -->
         <div class="hero-app-container">
             <div class="app-frame">
-                <!-- Persistent App Header -->
                 <div class="app-header">
                     <div class="app-header-logo">FAYR<span>GRND</span></div>
-                    <div class="app-header-status">LEDGER VERIFIED</div>
+                    <div class="app-header-status">VERIFIED</div>
                 </div>
 
-                <!-- Dynamic Viewport -->
                 <div class="app-viewport">
-                    
-                    <!-- 1. PROFILE TAB -->
+                    <!-- Profile View -->
                     <div id="tab-profile" class="tab-view active">
                         <div class="app-card profile-identity">
                             <div class="avatar-wrap">
@@ -557,18 +412,13 @@
                                 <div class="avatar-circle"></div>
                                 <span class="badge-side">LEGEND</span>
                             </div>
-
                             <div class="user-name">Nugget</div>
                             <div class="user-handle">@nugget</div>
                             <div class="linkups-count">🔗 221 LINK-UPS</div>
-
                             <div class="stars-row">★ ★ ★ ★ ☆</div>
-
                             <div class="honour-section">
                                 <span style="color: #ef4444;">VILLAIN</span>
-                                <div class="honour-track">
-                                    <div class="honour-thumb"></div>
-                                </div>
+                                <div class="honour-track"><div class="honour-thumb"></div></div>
                                 <span style="color: var(--cyan-accent);">HERO</span>
                             </div>
                         </div>
@@ -576,197 +426,155 @@
                         <div class="app-card">
                             <div class="app-card-title">TOP TRAITS</div>
                             <div class="traits-grid">
-                                <div class="trait-item">
-                                    <div class="trait-icon">⚡</div>
-                                    <div class="trait-name">Charismatic</div>
-                                    <div class="trait-level">LV.4</div>
-                                </div>
-                                <div class="trait-item">
-                                    <div class="trait-icon">👁</div>
-                                    <div class="trait-name">Empathetic</div>
-                                    <div class="trait-level">LV.3</div>
-                                </div>
-                                <div class="trait-item">
-                                    <div class="trait-icon">💡</div>
-                                    <div class="trait-name">Intelligent</div>
-                                    <div class="trait-level">LV.3</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="app-card">
-                            <div class="app-card-title">ON-LEDGER ACHIEVEMENTS</div>
-                            <div class="achievement-row">
-                                <span>First On-Chain Post</span>
-                                <div class="checkbox-group"><div class="box checked">✓</div></div>
-                            </div>
-                            <div class="achievement-row">
-                                <span>Real World Link-Up</span>
-                                <div class="checkbox-group"><div class="box checked">✓</div><div class="box checked">✓</div></div>
-                            </div>
-                            <div class="achievement-row">
-                                <span>Community Leader</span>
-                                <div class="checkbox-group"><div class="box checked">✓</div><div class="box"></div></div>
+                                <div class="trait-item"><div class="trait-icon">⚡</div><div class="trait-name">Charismatic</div><div class="trait-level">LV.4</div></div>
+                                <div class="trait-item"><div class="trait-icon">👁</div><div class="trait-name">Empathetic</div><div class="trait-level">LV.3</div></div>
+                                <div class="trait-item"><div class="trait-icon">💡</div><div class="trait-name">Intelligent</div><div class="trait-level">LV.3</div></div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 2. CREWS TAB -->
+                    <!-- Crews View -->
                     <div id="tab-crews" class="tab-view">
                         <div class="app-card">
                             <div class="app-card-title">SINGLE-TOPIC CREWS</div>
-                            <p style="font-size: 0.7rem; color: var(--text-secondary); margin-bottom: 0.75rem; text-align: center;">
-                                One dedicated crew per topic. No duplicated feeds or algorithmic noise.
-                            </p>
-
                             <div class="app-list-item">
-                                <div class="app-list-info">
-                                    <h4>🛹 Skate & Street</h4>
-                                    <p>1,420 Verified Members</p>
-                                </div>
+                                <div class="app-list-info"><h4>🛹 Skate & Street</h4><p>1,420 Members</p></div>
                                 <button class="app-btn-sm">ENTER</button>
                             </div>
-
                             <div class="app-list-item">
-                                <div class="app-list-info">
-                                    <h4>🏋️ Gym & Fitness</h4>
-                                    <p>890 Verified Members</p>
-                                </div>
-                                <button class="app-btn-sm">ENTER</button>
-                            </div>
-
-                            <div class="app-list-item">
-                                <div class="app-list-info">
-                                    <h4>🎵 Underground Music</h4>
-                                    <p>2,100 Verified Members</p>
-                                </div>
+                                <div class="app-list-info"><h4>🏋️ Gym & Fitness</h4><p>890 Members</p></div>
                                 <button class="app-btn-sm">ENTER</button>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 3. REACH OUT TAB -->
+                    <!-- Reach Out View -->
                     <div id="tab-reachout" class="tab-view">
                         <div class="app-card">
                             <div class="app-card-title">PUBLIC REACH OUTS</div>
-                            <p style="font-size: 0.7rem; color: var(--text-secondary); margin-bottom: 0.75rem; text-align: center;">
-                                Meet verified locals in real life based on star rating criteria.
-                            </p>
-
                             <div class="app-list-item">
-                                <div class="app-list-info">
-                                    <h4>Cinema (Night)</h4>
-                                    <p>Min Stars: ★★★☆☆</p>
-                                </div>
-                                <button class="app-btn-sm">JOIN</button>
-                            </div>
-
-                            <div class="app-list-item">
-                                <div class="app-list-info">
-                                    <h4>Football (Noon)</h4>
-                                    <p>Min Stars: ★★☆☆☆</p>
-                                </div>
-                                <button class="app-btn-sm">JOIN</button>
-                            </div>
-
-                            <div class="app-list-item">
-                                <div class="app-list-info">
-                                    <h4>Coffee / Chat</h4>
-                                    <p>Min Stars: ★★★★☆</p>
-                                </div>
+                                <div class="app-list-info"><h4>Cinema (Night)</h4><p>Min Stars: ★★★☆☆</p></div>
                                 <button class="app-btn-sm">JOIN</button>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 4. LINK UPS TAB -->
+                    <!-- Link Ups View -->
                     <div id="tab-linkups" class="tab-view">
                         <div class="app-card">
                             <div class="app-card-title">ACTIVE LINK-UPS</div>
                             <div class="app-list-item">
-                                <div class="app-list-info">
-                                    <h4>Pharrell</h4>
-                                    <p>Status: Confirmed • Today 4:00 PM</p>
-                                </div>
+                                <div class="app-list-info"><h4>Pharrell</h4><p>Confirmed • 4:00 PM</p></div>
                                 <button class="app-btn-sm" style="background: var(--cyan-accent); color: #000;">MAP</button>
-                            </div>
-                            <div class="app-list-item">
-                                <div class="app-list-info">
-                                    <h4>Harley</h4>
-                                    <p>Status: Pending Approval</p>
-                                </div>
-                                <button class="app-btn-sm" style="background: var(--surface-subcard); border: 1px solid var(--border-light);">VIEW</button>
                             </div>
                         </div>
                     </div>
-
                 </div>
 
-                <!-- Interactive Bottom Tab Navigation -->
+                <!-- Navigation Tabs -->
                 <div class="app-nav">
-                    <button class="app-nav-btn active" onclick="switchTab('tab-profile', this)">
-                        <span class="icon">👤</span>
-                        <span>Profile</span>
-                    </button>
-                    <button class="app-nav-btn" onclick="switchTab('tab-crews', this)">
-                        <span class="icon">⚡</span>
-                        <span>Crews</span>
-                    </button>
-                    <button class="app-nav-btn" onclick="switchTab('tab-reachout', this)">
-                        <span class="icon">📡</span>
-                        <span>Reach Out</span>
-                    </button>
-                    <button class="app-nav-btn" onclick="switchTab('tab-linkups', this)">
-                        <span class="icon">🔗</span>
-                        <span>Link-Ups</span>
-                    </button>
+                    <button class="app-nav-btn active" onclick="switchTab('tab-profile', this)"><span class="icon">👤</span><span>Profile</span></button>
+                    <button class="app-nav-btn" onclick="switchTab('tab-crews', this)"><span class="icon">⚡</span><span>Crews</span></button>
+                    <button class="app-nav-btn" onclick="switchTab('tab-reachout', this)"><span class="icon">📡</span><span>Reach Out</span></button>
+                    <button class="app-nav-btn" onclick="switchTab('tab-linkups', this)"><span class="icon">🔗</span><span>Link-Ups</span></button>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="features">
-        <h2 class="section-title">BUILT ON INTEGRITY.</h2>
-        <p class="section-sub">A platform structured like a protocol—transparent, unalterable, and honest.</p>
-
-        <div class="grid">
-            <div class="card">
-                <span class="card-num">01 // VERIFICATION</span>
-                <h3>One Person. One Identity.</h3>
-                <p>Verified real-time by AI and human checks. No bots, no duplicate profiles, and no synthetic engagement. Everything ties back to real ledger identity.</p>
-            </div>
-
-            <div class="card">
-                <span class="card-num">02 // REPUTATION</span>
-                <h3>Unfiltered Honour Levels</h3>
-                <p>Say what you want. Be argumentative or stand your ground—your Star Rating and Honour Level adapt dynamically to your actions without platform censorship.</p>
-            </div>
-
-            <div class="card">
-                <span class="card-num">03 // ARCHITECTURE</span>
-                <h3>Focused Communities</h3>
-                <p>Dedicated topic crews eliminate duplicate feeds and endless scrolling, ensuring relevant discussions backed by real profile ratings.</p>
+    <!-- Deep-Dive Feature 1: Identity & Honour -->
+    <section id="identity" class="feature-section">
+        <div class="feature-text">
+            <span class="feature-tag">01 // IDENTITY & REPUTATION</span>
+            <h2 class="feature-title">Your Star Rating & Honour Bar.</h2>
+            <p class="feature-desc">No bots. No synthetic engagement. Every profile represents a verified individual. The Villain-to-Hero spectrum dynamically tracks on-chain peer feedback, allowing users to build genuine trust without corporate shadowbans.</p>
+        </div>
+        <div class="feature-preview-box">
+            <div style="font-weight: 800; font-size: 1.2rem; color: var(--gold-accent); margin-bottom: 0.5rem;">ON-CHAIN REPUTATION</div>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem;">Calculated transparently via verified Link-Ups and peer interactions.</p>
+            <div style="background: var(--surface-subcard); padding: 1rem; border-radius: 12px; border: 1px solid var(--border-light);">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 700; margin-bottom: 6px;">
+                    <span style="color: #ef4444;">VILLAIN</span>
+                    <span style="color: var(--cyan-accent);">HERO</span>
+                </div>
+                <div style="width: 100%; height: 8px; background: #ef4444; border-radius: 4px; position: relative;">
+                    <div style="position: absolute; left: 70%; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; background: var(--cyan-accent); border-radius: 50%; box-shadow: 0 0 10px var(--cyan-accent);"></div>
+                </div>
             </div>
         </div>
     </section>
+
+    <!-- Deep-Dive Feature 2: Dedicated Crews -->
+    <section id="crews" class="feature-section">
+        <div class="feature-text">
+            <span class="feature-tag">02 // ARCHITECTURE</span>
+            <h2 class="feature-title">One Crew per Topic. Zero Noise.</h2>
+            <p class="feature-desc">FAYRGRND eliminates algorithmic noise and duplicate sub-communities. Every topic has a single, unified Crew space where verified users discuss what matters without spam or clutter.</p>
+        </div>
+        <div class="feature-preview-box">
+            <div style="font-weight: 800; font-size: 1.2rem; color: var(--accent-purple); margin-bottom: 0.5rem;">SINGLE-TOPIC ENGINE</div>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Organized community hubs with verified integrity.</p>
+        </div>
+    </section>
+
+    <!-- Deep-Dive Feature 3: Reach Out & Link-Ups -->
+    <section id="reachout" class="feature-section">
+        <div class="feature-text">
+            <span class="feature-tag">03 // REAL WORLD UTILITY</span>
+            <h2 class="feature-title">Verified Public Reach-Outs.</h2>
+            <p class="feature-desc">Connect with real people offline safely. Set customized Star Rating thresholds for your Reach-Out events to ensure attendees meet your preferred reputation standards.</p>
+        </div>
+        <div class="feature-preview-box">
+            <div style="font-weight: 800; font-size: 1.2rem; color: var(--cyan-accent); margin-bottom: 0.5rem;">LINK-UP VERIFIER</div>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Cryptographically log real-world meetings and build lasting status.</p>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="faq-section">
+        <div class="section-header">
+            <h2 class="section-title">FREQUENTLY ASKED QUESTIONS</h2>
+            <p class="section-sub">Everything you need to know about the protocol.</p>
+        </div>
+
+        <div class="faq-grid">
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">How does verification stop fake accounts? <span class="faq-toggle">+</span></div>
+                <div class="faq-answer">FAYRGRND uses a hybrid protocol combining AI verification with peer-assisted ledger consensus. Each individual can claim only one unique profile on the network.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">What determines my Star Rating and Honour Level? <span class="faq-toggle">+</span></div>
+                <div class="faq-answer">Your reputation is determined by feedback from real-world Link-Ups, completed achievements, and community interactions within Crews.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">Can bad actors alter their status artificially? <span class="faq-toggle">+</span></div>
+                <div class="faq-answer">No. All rating shifts require peer-verified validation recorded on the immutable ledger, preventing sybil attacks or artificially inflated stats.</div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div>© 2026 FAYRGRND PROTOCOL. ALL RIGHTS RESERVED.</div>
+        <div style="color: var(--cyan-accent);">STATUS: ALL SYSTEMS OPERATIONAL</div>
+    </footer>
 
     <script>
-        // --- Tab Switching Logic ---
+        // Tab switching for embedded app frame
         function switchTab(tabId, btnElement) {
-            const views = document.querySelectorAll('.tab-view');
-            views.forEach(view => view.classList.remove('active'));
-
-            const buttons = document.querySelectorAll('.app-nav-btn');
-            buttons.forEach(btn => btn.classList.remove('active'));
-
+            document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.app-nav-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             btnElement.classList.add('active');
         }
 
-        // --- Sleek 3D Node Background (Three.js) ---
+        // FAQ accordion toggle
+        function toggleFaq(element) {
+            element.classList.toggle('open');
+        }
+
+        // 3D Background canvas setup
         const container = document.getElementById('canvas-container');
         const scene = new THREE.Scene();
-
         const camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 1000);
         camera.position.z = 4.5;
 
@@ -785,16 +593,12 @@
         const knot = new THREE.Mesh(geometry, material);
         scene.add(knot);
 
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-        scene.add(ambientLight);
-
+        scene.add(new THREE.AmbientLight(0xffffff, 0.5));
         const dirLight = new THREE.DirectionalLight(0xA78BFA, 1.5);
         dirLight.position.set(5, 5, 5);
         scene.add(dirLight);
 
-        let targetX = 0;
-        let targetY = 0;
-
+        let targetX = 0, targetY = 0;
         document.addEventListener('mousemove', (e) => {
             targetX = (e.clientX / window.innerWidth) - 0.5;
             targetY = (e.clientY / window.innerHeight) - 0.5;
@@ -802,16 +606,12 @@
 
         function animate() {
             requestAnimationFrame(animate);
-
             knot.rotation.x += 0.002;
             knot.rotation.y += 0.003;
-
             knot.rotation.y += (targetX - knot.rotation.y) * 0.03;
             knot.rotation.x += (targetY - knot.rotation.x) * 0.03;
-
             renderer.render(scene, camera);
         }
-
         animate();
 
         window.addEventListener('resize', () => {
