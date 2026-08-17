@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FAYRGRND</title>
+    <style>
+        :root {
+            --bg: #0a0b0e;
+            --surface: #12151c;
+            --card: #181c26;
+            --sub: #0f1117;
+            --purple: #8B5CF6;
+            --purple-glow: rgba(139, 92, 246, 0.25);
+            --cyan: #22d3ee;
+            --gold: #fbbf24;
+            --red: #ef4444;
+            --border: rgba(255,255,255,0.08);
+            --text: #F8FAFC;
+            --muted: #94A3B8;
+            --dim: #64748b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .frame {
+            width: 100%;
+            max-width: 410px;
+            height: 100vh;
+            max-height: 860px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 40px var(--purple-glow);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        @media (max-width: 480px) {
+            .frame { height: 100vh; max-height: 100vh; border-radius: 0; border: none; }
+        }
+
+        /* AUTH */
+        .auth-screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem 1.5rem;
+            background: var(--bg);
+        }
+        .auth-logo { text-align: center; margin-bottom: 2.5rem; }
+        .auth-logo h1 { font-size: 1.8rem; font-weight: 900; letter-spacing: -1px; text-transform: uppercase; }
+        .auth-logo h1 span { color: var(--purple); }
+        .auth-logo p { font-size: 0.8rem; color: var(--muted); margin-top: 0.4rem; }
+        .auth-card { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 1.5rem; }
+        .auth-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.4rem; }
+        .auth-tab {
+            flex: 1; padding: 0.65rem; border: 1px solid var(--border); background: var(--sub);
+            color: var(--muted); border-radius: 10px; font-weight: 700; font-size: 0.8rem; cursor: pointer;
+        }
+        .auth-tab.active { background: var(--purple); border-color: var(--purple); color: #fff; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; font-size: 0.7rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 0.35rem; }
+        .form-group input {
+            width: 100%; background: var(--sub); border: 1px solid var(--border); border-radius: 10px;
+            padding: 0.75rem 0.9rem; color: var(--text); font-size: 0.9rem;
+        }
+        .form-group input:focus { outline: none; border-color: var(--purple); }
+        .auth-btn {
+            width: 100%; background: var(--purple); color: #fff; border: none; padding: 0.9rem;
+            border-radius: 12px; font-weight: 700; font-size: 0.9rem; cursor: pointer; margin-top: 0.5rem;
+            box-shadow: 0 4px 16px var(--purple-glow);
+        }
+        .auth-error {
+            background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5;
+            font-size: 0.75rem; padding: 0.6rem 0.8rem; border-radius: 8px; margin-bottom: 1rem; display: none;
+        }
+        .auth-hint { text-align: center; font-size: 0.7rem; color: var(--dim); margin-top: 1.2rem; line-height: 1.4; }
+
+        /* APP */
+        .app-shell { display: none; flex-direction: column; height: 100%; }
+        .app-shell.active { display: flex; }
+
+        .header {
+            background: rgba(18,21,28,0.92); backdrop-filter: blur(16px); padding: 0.7rem 1rem;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--border); flex-shrink: 0;
+        }
+        .header-logo { font-weight: 800; text-transform: uppercase; font-size: 0.9rem; letter-spacing: -0.5px; }
+        .header-logo span { color: var(--purple); }
+        .header-right { display: flex; align-items: center; gap: 0.5rem; }
+        .balance {
+            background: var(--sub); border: 1px solid var(--border); padding: 0.22rem 0.5rem;
+            border-radius: 20px; font-size: 0.68rem; font-weight: 700; color: var(--gold); font-family: monospace;
+        }
+        .status-pill {
+            font-size: 0.58rem; color: var(--cyan); border: 1px solid rgba(34,211,238,0.35);
+            padding: 2px 6px; border-radius: 10px; font-weight: 600; font-family: monospace;
+        }
+
+        .viewport { flex: 1; overflow-y: auto; padding: 0.85rem; background: var(--bg); }
+        .viewport::-webkit-scrollbar { width: 0; }
+
+        .card {
+            background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+            padding: 1rem; margin-bottom: 0.75rem;
+        }
+        .card-title {
+            font-size: 0.65rem; font-weight: 800; letter-spacing: 0.5px;
+            text-transform: uppercase; color: var(--muted); margin-bottom: 0.65rem;
+        }
+
+        /* Profile */
+        .profile-card { text-align: center; }
+        .avatar {
+            width: 82px; height: 82px; border-radius: 50%; border: 2.5px solid var(--gold);
+            background: #1a1a1a url('https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=300&h=300&fit=crop') center/cover;
+            margin: 0 auto 0.5rem; box-shadow: 0 0 18px rgba(251,191,36,0.3);
+        }
+        .display-name { font-size: 1.25rem; font-weight: 800; }
+        .handle { color: var(--purple); font-size: 0.78rem; font-family: monospace; margin-top: 2px; }
+        .up-pill {
+            display: inline-flex; background: rgba(34,211,238,0.1); border: 1px solid rgba(34,211,238,0.2);
+            color: var(--cyan); font-size: 0.68rem; font-weight: 700; padding: 0.15rem 0.45rem;
+            border-radius: 20px; margin-top: 0.4rem; font-family: monospace;
+        }
+        .stars { color: var(--cyan); font-size: 1rem; letter-spacing: 2px; margin: 0.5rem 0 0.15rem; }
+        .score { font-size: 0.7rem; color: var(--muted); margin-bottom: 0.5rem; }
+        .honour { display: flex; align-items: center; gap: 8px; font-size: 0.6rem; font-weight: 800; }
+        .honour-track {
+            flex: 1; height: 5px; background: linear-gradient(to right, #ef4444, #f97316, #eab308, #22c55e, #22d3ee);
+            border-radius: 3px; position: relative;
+        }
+        .honour-thumb {
+            position: absolute; left: 65%; top: 50%; transform: translate(-50%,-50%);
+            width: 11px; height: 11px; border-radius: 50%; background: #fff;
+            border: 2px solid var(--cyan); box-shadow: 0 0 6px var(--cyan);
+        }
+        .stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 0.45rem; margin-top: 0.8rem; }
+        .stat { background: var(--sub); border: 1px solid var(--border); border-radius: 10px; padding: 0.45rem; text-align: center; }
+        .stat-val { font-size: 1rem; font-weight: 800; }
+        .stat-label { font-size: 0.52rem; color: var(--muted); text-transform: uppercase; margin-top: 2px; }
+
+        .bio-box {
+            width: 100%; background: var(--sub); border: 1px solid var(--border); border-radius: 10px;
+            color: var(--text); padding: 0.7rem; font-size: 0.78rem; resize: none; line-height: 1.4; min-height: 70px;
+        }
+        .bio-box:focus { outline: none; border-color: var(--purple); }
+
+        .btn {
+            width: 100%; background: var(--purple); color: #fff; border: none; padding: 0.8rem;
+            border-radius: 12px; font-weight: 700; font-size: 0.8rem; cursor: pointer;
+            box-shadow: 0 4px 14px var(--purple-glow);
+        }
+        .btn.secondary { background: var(--sub); border: 1px solid var(--border); box-shadow: none; color: var(--text); }
+        .btn.small { padding: 0.6rem; font-size: 0.72rem; }
+        .btn:active { transform: scale(0.98); }
+        .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+
+        .wallet-info { font-size: 0.72rem; color: var(--muted); line-height: 1.5; }
+        .wallet-info code { color: var(--cyan); font-size: 0.68rem; word-break: break-all; }
+
+        /* Crews */
+        .crew-item {
+            display: flex; align-items: center; gap: 0.8rem; padding: 0.85rem;
+            background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+            margin-bottom: 0.55rem; cursor: pointer; transition: border-color 0.2s;
+        }
+        .crew-item:hover { border-color: rgba(139,92,246,0.4); }
+        .crew-icon {
+            width: 44px; height: 44px; border-radius: 12px; background: var(--sub);
+            display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0;
+        }
+        .crew-info { flex: 1; min-width: 0; }
+        .crew-name { font-weight: 700; font-size: 0.9rem; }
+        .crew-meta { font-size: 0.68rem; color: var(--muted); margin-top: 2px; }
+        .crew-arrow { color: var(--purple); font-size: 0.8rem; font-weight: 700; }
+
+        .sub-crew {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0.7rem 0.9rem; background: var(--sub); border-radius: 10px;
+            margin-bottom: 0.4rem; cursor: pointer; border: 1px solid transparent;
+        }
+        .sub-crew:hover { border-color: var(--border); }
+        .sub-crew-name { font-size: 0.82rem; font-weight: 600; }
+        .sub-crew-count { font-size: 0.68rem; color: var(--muted); }
+
+        /* Posts */
+        .post-card {
+            background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+            padding: 0.9rem; margin-bottom: 0.65rem; cursor: pointer;
+        }
+        .post-header { display: flex; align-items: center; gap: 0.55rem; margin-bottom: 0.5rem; }
+        .post-avatar {
+            width: 32px; height: 32px; border-radius: 50%; background: #333;
+            border: 1.5px solid var(--gold); flex-shrink: 0;
+        }
+        .post-author { font-weight: 700; font-size: 0.82rem; }
+        .post-handle { font-size: 0.68rem; color: var(--muted); }
+        .post-time { font-size: 0.65rem; color: var(--dim); margin-left: auto; }
+        .post-body { font-size: 0.88rem; line-height: 1.45; margin-bottom: 0.6rem; }
+        .post-meta { display: flex; gap: 0.8rem; font-size: 0.7rem; color: var(--muted); }
+        .post-crew-tag {
+            display: inline-block; background: rgba(139,92,246,0.15); color: var(--purple);
+            font-size: 0.65rem; font-weight: 700; padding: 0.15rem 0.45rem; border-radius: 6px; margin-bottom: 0.5rem;
+        }
+
+        /* Compose */
+        .compose-box {
+            width: 100%; background: var(--sub); border: 1px solid var(--border); border-radius: 12px;
+            color: var(--text); padding: 0.8rem; font-size: 0.88rem; resize: none; min-height: 90px; line-height: 1.4;
+        }
+        .compose-box:focus { outline: none; border-color: var(--purple); }
+        .compose-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 0.6rem; }
+        .compose-cost { font-size: 0.72rem; color: var(--gold); font-weight: 600; }
+
+        /* Reactions */
+        .reactions {
+            display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.7rem; padding-top: 0.7rem;
+            border-top: 1px solid var(--border);
+        }
+        .reaction-btn {
+            background: var(--sub); border: 1px solid var(--border); border-radius: 20px;
+            padding: 0.35rem 0.65rem; font-size: 0.78rem; cursor: pointer; color: var(--text);
+            display: flex; align-items: center; gap: 0.3rem;
+        }
+        .reaction-btn:active { background: #1a1e2a; }
+        .reaction-count { font-size: 0.68rem; color: var(--muted); font-weight: 600; }
+
+        .back-btn {
+            background: none; border: none; color: var(--purple); font-size: 0.8rem;
+            font-weight: 700; cursor: pointer; margin-bottom: 0.7rem; display: flex; align-items: center; gap: 0.3rem;
+        }
+
+        /* Nav */
+        .nav {
+            background: rgba(18,21,28,0.95); backdrop-filter: blur(16px); border-top: 1px solid var(--border);
+            padding: 0.5rem 0.2rem 0.65rem; display: flex; justify-content: space-around; flex-shrink: 0;
+        }
+        .nav-btn {
+            background: none; border: none; color: var(--muted); font-size: 0.52rem; font-weight: 700;
+            text-transform: uppercase; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px;
+            padding: 0.2rem 0.5rem;
+        }
+        .nav-btn .icon { font-size: 1.15rem; }
+        .nav-btn.active { color: var(--purple); }
+
+        .toast {
+            position: absolute; bottom: 78px; left: 50%; transform: translateX(-50%) translateY(16px);
+            background: var(--card); border: 1px solid var(--purple); color: var(--text);
+            padding: 0.65rem 1rem; border-radius: 12px; font-size: 0.75rem; font-weight: 600;
+            opacity: 0; pointer-events: none; transition: all 0.3s; z-index: 50; white-space: nowrap;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        .hidden { display: none !important; }
+        .empty { text-align: center; padding: 2rem 1rem; color: var(--muted); font-size: 0.85rem; line-height: 1.5; }
+    </style>
+</head>
+<body>
+
+<div class="frame">
+
+    <!-- AUTH -->
+    <div class="auth-screen" id="auth-screen">
+        <div class="auth-logo">
+            <h1>FAYR<span>GRND</span></h1>
+            <p>One human. One account. Real status.</p>
+        </div>
+        <div class="auth-card">
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="tab-signup" onclick="switchAuthTab('signup')">Sign Up</button>
+                <button class="auth-tab" id="tab-login" onclick="switchAuthTab('login')">Log In</button>
+            </div>
+            <div class="auth-error" id="auth-error"></div>
+            <div id="form-signup">
+                <div class="form-group">
+                    <label>Display Name</label>
+                    <input type="text" id="su-name" placeholder="Nugget" maxlength="20">
+                </div>
+                <div class="form-group">
+                    <label>Handle</label>
+                    <input type="text" id="su-handle" placeholder="nugget" maxlength="16">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="su-pass" placeholder="••••••••">
+                </div>
+                <button class="auth-btn" onclick="signUp()">Create Account · £1</button>
+            </div>
+            <div id="form-login" class="hidden">
+                <div class="form-group">
+                    <label>Handle</label>
+                    <input type="text" id="li-handle" placeholder="nugget">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="li-pass" placeholder="••••••••">
+                </div>
+                <button class="auth-btn" onclick="logIn()">Log In</button>
+            </div>
+        </div>
+        <div class="auth-hint">Virtual wallet created automatically.<br>Starter fee: £1.00 (simulated)</div>
+    </div>
+
+    <!-- APP -->
+    <div class="app-shell" id="app-shell">
+        <div class="header">
+            <div class="header-logo">FAYR<span>GRND</span></div>
+            <div class="header-right">
+                <div class="balance" id="balance-display">£0.00</div>
+                <div class="status-pill">VERIFIED</div>
+            </div>
+        </div>
+
+        <div class="viewport" id="viewport">
+
+            <!-- PROFILE -->
+            <div id="view-profile">
+                <div class="card profile-card">
+                    <div class="avatar" id="avatar"></div>
+                    <div class="display-name" id="p-name">—</div>
+                    <div class="handle" id="p-handle">@—</div>
+                    <div class="up-pill" id="p-ups">UP · 0</div>
+                    <div class="stars">★ ★ ★ ☆ ☆</div>
+                    <div class="score" id="p-score">3.00</div>
+                    <div class="honour">
+                        <span style="color:var(--red)">VILLAIN</span>
+                        <div class="honour-track"><div class="honour-thumb" id="honour-thumb"></div></div>
+                        <span style="color:var(--cyan)">HERO</span>
+                    </div>
+                    <div class="stats">
+                        <div class="stat"><div class="stat-val" id="s-linkups">0</div><div class="stat-label">Link-Ups</div></div>
+                        <div class="stat"><div class="stat-val" id="s-events">0</div><div class="stat-label">Events</div></div>
+                        <div class="stat"><div class="stat-val" id="s-crews">0</div><div class="stat-label">Crews</div></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Bio</div>
+                    <textarea class="bio-box" id="p-bio" placeholder="Tell people who you are..."></textarea>
+                </div>
+                <div class="card">
+                    <div class="card-title">Wallet</div>
+                    <div class="wallet-info">
+                        Address: <code id="p-wallet">—</code><br>
+                        Network: Virtual (simulated)<br>
+                        Balance: <span id="p-balance-text">£0.00</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="row-2">
+                        <button class="btn secondary small" onclick="saveProfile()">Save Profile</button>
+                        <button class="btn secondary small" onclick="logOut()">Log Out</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CREWS LIST -->
+            <div id="view-crews" class="hidden">
+                <div class="card">
+                    <div class="card-title">Crews</div>
+                    <div style="font-size:0.75rem; color:var(--muted); margin-bottom:0.3rem;">One crew per topic. Zero noise.</div>
+                </div>
+                <div id="crews-list"></div>
+            </div>
+
+            <!-- CREW DETAIL (sub-crews + posts) -->
+            <div id="view-crew-detail" class="hidden">
+                <button class="back-btn" onclick="showView('crews')">← All Crews</button>
+                <div class="card">
+                    <div style="display:flex; align-items:center; gap:0.7rem;">
+                        <div class="crew-icon" id="cd-icon">🏋️</div>
+                        <div>
+                            <div class="crew-name" id="cd-name" style="font-size:1.05rem;">Gym</div>
+                            <div class="crew-meta" id="cd-meta">0 posts</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Sections</div>
+                    <div id="subcrews-list"></div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Recent Posts</div>
+                    <div id="crew-posts"></div>
+                </div>
+                <button class="btn" onclick="openCompose()">Create Post · £0.003</button>
+            </div>
+
+            <!-- FEED (global recent) -->
+            <div id="view-feed" class="hidden">
+                <div class="card">
+                    <div class="card-title">Feed</div>
+                    <div style="font-size:0.75rem; color:var(--muted);">Latest posts across all crews</div>
+                </div>
+                <div id="feed-posts"></div>
+                <button class="btn" style="margin-top:0.5rem;" onclick="openCompose()">Create Post · £0.003</button>
+            </div>
+
+            <!-- COMPOSE -->
+            <div id="view-compose" class="hidden">
+                <button class="back-btn" onclick="closeCompose()">← Back</button>
+                <div class="card">
+                    <div class="card-title">New Post</div>
+                    <div class="form-group" style="margin-bottom:0.8rem;">
+                        <label style="font-size:0.65rem; color:var(--muted); font-weight:700; text-transform:uppercase;">Crew / Section</label>
+                        <select id="compose-crew" style="width:100%; background:var(--sub); border:1px solid var(--border); border-radius:10px; padding:0.65rem; color:var(--text); font-size:0.85rem;">
+                        </select>
+                    </div>
+                    <textarea class="compose-box" id="compose-text" placeholder="What's on your mind?"></textarea>
+                    <div class="compose-footer">
+                        <div class="compose-cost">Cost: £0.003</div>
+                        <button class="btn small" style="width:auto; padding:0.55rem 1.2rem;" onclick="submitPost()">Post</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- POST DETAIL -->
+            <div id="view-post" class="hidden">
+                <button class="back-btn" onclick="closePost()">← Back</button>
+                <div id="post-detail"></div>
+            </div>
+
+            <!-- LINK-UPS placeholder -->
+            <div id="view-linkups" class="hidden">
+                <div class="card">
+                    <div class="card-title">Link-Ups</div>
+                    <div class="empty">Real-world meetings coming soon.</div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="nav">
+            <button class="nav-btn active" data-view="profile" onclick="showView('profile', this)">
+                <span class="icon">👤</span>Profile
+            </button>
+            <button class="nav-btn" data-view="feed" onclick="showView('feed', this)">
+                <span class="icon">📡</span>Feed
+            </button>
+            <button class="nav-btn" data-view="crews" onclick="showView('crews', this)">
+                <span class="icon">⚡</span>Crews
+            </button>
+            <button class="nav-btn" data-view="linkups" onclick="showView('linkups', this)">
+                <span class="icon">🔗</span>Link-Ups
+            </button>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+</div>
+
+<script>
+    // ===== DATA =====
+    const DB_KEY = 'fayrgrnd_users';
+    const POSTS_KEY = 'fayrgrnd_posts';
+    const SESSION_KEY = 'fayrgrnd_session';
+    const POST_COST = 0.003;
+
+    const CREWS = [
+        {
+            id: 'gym', name: 'Gym & Fitness', icon: '🏋️',
+            subs: [
+                { id: 'bodybuilding', name: 'Bodybuilding' },
+                { id: 'crossfit', name: 'CrossFit' },
+                { id: 'powerlifting', name: 'Powerlifting' },
+                { id: 'running', name: 'Running' },
+                { id: 'general', name: 'General Fitness' }
+            ]
+        },
+        {
+            id: 'cars', name: 'Car Culture', icon: '🚗',
+            subs: [
+                { id: 'classic', name: 'Classic Cars' },
+                { id: 'super', name: 'Supercars' },
+                { id: 'hyper', name: 'Hypercars' },
+                { id: 'concept', name: 'Concept Cars' },
+                { id: 'general', name: 'General' }
+            ]
+        },
+        {
+            id: 'football', name: 'Football', icon: '⚽',
+            subs: [
+                { id: 'premier', name: 'Premier League' },
+                { id: 'champions', name: 'Champions League' },
+                { id: 'local', name: 'Local / Amateur' },
+                { id: 'general', name: 'General' }
+            ]
+        },
+        {
+            id: 'music', name: 'Music', icon: '🎧',
+            subs: [
+                { id: 'production', name: 'Production' },
+                { id: 'hiphop', name: 'Hip-Hop' },
+                { id: 'electronic', name: 'Electronic' },
+                { id: 'general', name: 'General' }
+            ]
+        },
+        {
+            id: 'skate', name: 'Skate & Street', icon: '🛹',
+            subs: [
+                { id: 'street', name: 'Street' },
+                { id: 'park', name: 'Park' },
+                { id: 'general', name: 'General' }
+            ]
+        },
+        {
+            id: 'startups', name: 'Startup Builders', icon: '🚀',
+            subs: [
+                { id: 'ideas', name: 'Ideas' },
+                { id: 'building', name: 'Building' },
+                { id: 'funding', name: 'Funding' },
+                { id: 'general', name: 'General' }
+            ]
+        }
+    ];
+
+    const REACTIONS = [
+        { id: 'fire', emoji: '🔥', label: 'Fire' },
+        { id: 'happy', emoji: '😊', label: 'Happy' },
+        { id: 'sad', emoji: '😢', label: 'Sad' },
+        { id: 'angry', emoji: '😠', label: 'Angry' },
+        { id: 'think', emoji: '🤔', label: 'Thinking' },
+        { id: 'fuckyeah', emoji: '💥', label: 'Fuck Yeah' }
+    ];
+
+    let currentCrewId = null;
+    let currentPostId = null;
+    let returnView = 'feed';
+
+    // ===== STORAGE =====
+    function getUsers() {
+        try { return JSON.parse(localStorage.getItem(DB_KEY) || '{}'); } catch { return {}; }
+    }
+    function saveUsers(u) { localStorage.setItem(DB_KEY, JSON.stringify(u)); }
+
+    function getPosts() {
+        try { return JSON.parse(localStorage.getItem(POSTS_KEY) || '[]'); } catch { return []; }
+    }
+    function savePosts(p) { localStorage.setItem(POSTS_KEY, JSON.stringify(p)); }
+
+    function getSession() { return localStorage.getItem(SESSION_KEY); }
+    function setSession(h) { localStorage.setItem(SESSION_KEY, h); }
+    function clearSession() { localStorage.removeItem(SESSION_KEY); }
+
+    function getCurrentUser() {
+        const h = getSession();
+        if (!h) return null;
+        return getUsers()[h] || null;
+    }
+
+    function updateUser(handle, data) {
+        const users = getUsers();
+        if (!users[handle]) return;
+        Object.assign(users[handle], data);
+        saveUsers(users);
+    }
+
+    // ===== HELPERS =====
+    function generateWallet() {
+        const c = '0123456789abcdef';
+        let a = '0x';
+        for (let i = 0; i < 40; i++) a += c[Math.floor(Math.random() * 16)];
+        return a;
+    }
+
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 2200);
+    }
+
+    function showError(msg) {
+        const el = document.getElementById('auth-error');
+        el.textContent = msg;
+        el.style.display = 'block';
+    }
+    function clearError() { document.getElementById('auth-error').style.display = 'none'; }
+
+    function timeAgo(ts) {
+        const s = Math.floor((Date.now() - ts) / 1000);
+        if (s < 60) return 'just now';
+        if (s < 3600) return Math.floor(s/60) + 'm';
+        if (s < 86400) return Math.floor(s/3600) + 'h';
+        return Math.floor(s/86400) + 'd';
+    }
+
+    // ===== AUTH =====
+    function switchAuthTab(tab) {
+        clearError();
+        document.getElementById('tab-signup').classList.toggle('active', tab === 'signup');
+        document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+        document.getElementById('form-signup').classList.toggle('hidden', tab !== 'signup');
+        document.getElementById('form-login').classList.toggle('hidden', tab !== 'login');
+    }
+
+    function signUp() {
+        clearError();
+        const name = document.getElementById('su-name').value.trim();
+        const handle = document.getElementById('su-handle').value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
+        const pass = document.getElementById('su-pass').value;
+
+        if (!name || name.length < 2) return showError('Display name too short');
+        if (!handle || handle.length < 3) return showError('Handle must be at least 3 characters');
+        if (!pass || pass.length < 4) return showError('Password must be at least 4 characters');
+
+        const users = getUsers();
+        if (users[handle]) return showError('Handle already taken');
+
+        const user = {
+            handle, name, password: pass,
+            wallet: generateWallet(),
+            balance: 11.00,
+            bio: '', stars: 3.0, honour: 50,
+            linkups: 0, events: 0, crews: 0,
+            createdAt: Date.now()
+        };
+        users[handle] = user;
+        saveUsers(users);
+        setSession(handle);
+        showToast('Account created · £1 fee paid');
+        enterApp(user);
+    }
+
+    function logIn() {
+        clearError();
+        const handle = document.getElementById('li-handle').value.trim().toLowerCase();
+        const pass = document.getElementById('li-pass').value;
+        const users = getUsers();
+        const user = users[handle];
+        if (!user) return showError('Account not found');
+        if (user.password !== pass) return showError('Wrong password');
+        setSession(handle);
+        showToast('Welcome back');
+        enterApp(user);
+    }
+
+    function logOut() {
+        clearSession();
+        document.getElementById('app-shell').classList.remove('active');
+        document.getElementById('auth-screen').style.display = 'flex';
+        showToast('Logged out');
+    }
+
+    function enterApp(user) {
+        document.getElementById('auth-screen').style.display = 'none';
+        document.getElementById('app-shell').classList.add('active');
+        renderProfile(user);
+        renderCrewsList();
+        renderFeed();
+    }
+
+    function renderProfile(user) {
+        document.getElementById('p-name').textContent = user.name;
+        document.getElementById('p-handle').textContent = '@' + user.handle;
+        document.getElementById('p-ups').textContent = 'UP · ' + (user.linkups || 0);
+        document.getElementById('p-score').textContent = (user.stars || 3).toFixed(2);
+        document.getElementById('p-bio').value = user.bio || '';
+        document.getElementById('p-wallet').textContent = user.wallet;
+        document.getElementById('p-balance-text').textContent = '£' + user.balance.toFixed(2);
+        document.getElementById('balance-display').textContent = '£' + user.balance.toFixed(2);
+        document.getElementById('s-linkups').textContent = user.linkups || 0;
+        document.getElementById('s-events').textContent = user.events || 0;
+        document.getElementById('s-crews').textContent = user.crews || 0;
+        document.getElementById('honour-thumb').style.left = Math.min(100, Math.max(0, user.honour || 50)) + '%';
+    }
+
+    function saveProfile() {
+        const user = getCurrentUser();
+        if (!user) return;
+        user.bio = document.getElementById('p-bio').value;
+        updateUser(user.handle, { bio: user.bio });
+        showToast('Profile saved');
+    }
+
+    function refreshBalance() {
+        const user = getCurrentUser();
+        if (!user) return;
+        document.getElementById('balance-display').textContent = '£' + user.balance.toFixed(2);
+        const el = document.getElementById('p-balance-text');
+        if (el) el.textContent = '£' + user.balance.toFixed(2);
+    }
+
+    // ===== NAV =====
+    function showView(viewId, btn) {
+        const views = ['profile', 'feed', 'crews', 'crew-detail', 'compose', 'post', 'linkups'];
+        views.forEach(v => {
+            const el = document.getElementById('view-' + v);
+            if (el) el.classList.toggle('hidden', v !== viewId);
+        });
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+        else {
+            // highlight correct nav when coming from sub-views
+            const map = { 'crew-detail': 'crews', 'compose': 'feed', 'post': 'feed' };
+            const navView = map[viewId] || viewId;
+            const navBtn = document.querySelector(`.nav-btn[data-view="${navView}"]`);
+            if (navBtn) navBtn.classList.add('active');
+        }
+
+        if (viewId === 'feed') renderFeed();
+        if (viewId === 'crews') renderCrewsList();
+    }
+
+    // ===== CREWS =====
+    function renderCrewsList() {
+        const list = document.getElementById('crews-list');
+        const posts = getPosts();
+        list.innerHTML = CREWS.map(c => {
+            const count = posts.filter(p => p.crewId === c.id).length;
+            return `
+                <div class="crew-item" onclick="openCrew('${c.id}')">
+                    <div class="crew-icon">${c.icon}</div>
+                    <div class="crew-info">
+                        <div class="crew-name">${c.name}</div>
+                        <div class="crew-meta">${count} posts · ${c.subs.length} sections</div>
+                    </div>
+                    <div class="crew-arrow">→</div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function openCrew(crewId) {
+        currentCrewId = crewId;
+        const crew = CREWS.find(c => c.id === crewId);
+        if (!crew) return;
+
+        document.getElementById('cd-icon').textContent = crew.icon;
+        document.getElementById('cd-name').textContent = crew.name;
+
+        const posts = getPosts().filter(p => p.crewId === crewId);
+        document.getElementById('cd-meta').textContent = posts.length + ' posts';
+
+        // Sub crews
+        const subList = document.getElementById('subcrews-list');
+        subList.innerHTML = crew.subs.map(s => {
+            const count = posts.filter(p => p.subId === s.id).length;
+            return `
+                <div class="sub-crew" onclick="openCompose('${crewId}', '${s.id}')">
+                    <span class="sub-crew-name">${s.name}</span>
+                    <span class="sub-crew-count">${count} posts</span>
+                </div>
+            `;
+        }).join('');
+
+        // Posts in this crew
+        renderPostList(document.getElementById('crew-posts'), posts);
+        showView('crew-detail');
+    }
+
+    // ===== POSTS =====
+    function renderPostList(container, posts) {
+        if (!posts.length) {
+            container.innerHTML = '<div class="empty">No posts yet. Be the first.</div>';
+            return;
+        }
+        // newest first
+        posts = [...posts].sort((a, b) => b.createdAt - a.createdAt);
+        container.innerHTML = posts.map(p => renderPostCard(p)).join('');
+    }
+
+    function renderPostCard(p) {
+        const crew = CREWS.find(c => c.id === p.crewId);
+        const sub = crew?.subs.find(s => s.id === p.subId);
+        const totalReactions = Object.values(p.reactions || {}).reduce((a, b) => a + b, 0);
+        return `
+            <div class="post-card" onclick="openPost('${p.id}')">
+                <div class="post-crew-tag">${crew?.icon || ''} ${crew?.name || ''}${sub ? ' · ' + sub.name : ''}</div>
+                <div class="post-header">
+                    <div class="post-avatar"></div>
+                    <div>
+                        <div class="post-author">${p.authorName}</div>
+                        <div class="post-handle">@${p.authorHandle}</div>
+                    </div>
+                    <div class="post-time">${timeAgo(p.createdAt)}</div>
+                </div>
+                <div class="post-body">${escapeHtml(p.text)}</div>
+                <div class="post-meta">
+                    <span>${totalReactions} reactions</span>
+                </div>
+            </div>
+        `;
+    }
+
+    function escapeHtml(str) {
+        return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function renderFeed() {
+        const posts = getPosts();
+        renderPostList(document.getElementById('feed-posts'), posts);
+    }
+
+    // ===== COMPOSE =====
+    function openCompose(crewId, subId) {
+        returnView = currentCrewId ? 'crew-detail' : 'feed';
+        const select = document.getElementById('compose-crew');
+        select.innerHTML = '';
+
+        CREWS.forEach(c => {
+            c.subs.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = c.id + '|' + s.id;
+                opt.textContent = c.name + ' → ' + s.name;
+                if (crewId && subId && c.id === crewId && s.id === subId) opt.selected = true;
+                select.appendChild(opt);
+            });
+        });
+
+        document.getElementById('compose-text').value = '';
+        showView('compose');
+    }
+
+    function closeCompose() {
+        showView(returnView || 'feed');
+    }
+
+    function submitPost() {
+        const user = getCurrentUser();
+        if (!user) return;
+
+        const text = document.getElementById('compose-text').value.trim();
+        if (!text) return showToast('Write something first');
+
+        if (user.balance < POST_COST) return showToast('Not enough balance');
+
+        const [crewId, subId] = document.getElementById('compose-crew').value.split('|');
+
+        // Deduct fee
+        user.balance = +(user.balance - POST_COST).toFixed(4);
+        updateUser(user.handle, { balance: user.balance });
+        refreshBalance();
+
+        const post = {
+            id: 'p_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+            authorHandle: user.handle,
+            authorName: user.name,
+            crewId,
+            subId,
+            text,
+            reactions: {},
+            createdAt: Date.now()
+        };
+
+        const posts = getPosts();
+        posts.push(post);
+        savePosts(posts);
+
+        showToast('Posted · -£0.003');
+        currentCrewId = crewId;
+        openCrew(crewId);
+    }
+
+    // ===== POST DETAIL + REACTIONS =====
+    function openPost(postId) {
+        currentPostId = postId;
+        returnView = currentCrewId ? 'crew-detail' : 'feed';
+        const posts = getPosts();
+        const post = posts.find(p => p.id === postId);
+        if (!post) return;
+
+        const crew = CREWS.find(c => c.id === post.crewId);
+        const sub = crew?.subs.find(s => s.id === post.subId);
+
+        let html = `
+            <div class="card">
+                <div class="post-crew-tag">${crew?.icon || ''} ${crew?.name || ''}${sub ? ' · ' + sub.name : ''}</div>
+                <div class="post-header">
+                    <div class="post-avatar"></div>
+                    <div>
+                        <div class="post-author">${post.authorName}</div>
+                        <div class="post-handle">@${post.authorHandle}</div>
+                    </div>
+                    <div class="post-time">${timeAgo(post.createdAt)}</div>
+                </div>
+                <div class="post-body" style="font-size:1rem; margin-bottom:0.8rem;">${escapeHtml(post.text)}</div>
+                <div class="reactions">
+        `;
+
+        REACTIONS.forEach(r => {
+            const count = (post.reactions && post.reactions[r.id]) || 0;
+            html += `
+                <button class="reaction-btn" onclick="event.stopPropagation(); addReaction('${post.id}', '${r.id}')">
+                    <span>${r.emoji}</span>
+                    <span class="reaction-count">${count || ''}</span>
+                </button>
+            `;
+        });
+
+        html += `</div></div>`;
+        document.getElementById('post-detail').innerHTML = html;
+        showView('post');
+    }
+
+    function closePost() {
+        if (currentCrewId) openCrew(currentCrewId);
+        else showView('feed');
+    }
+
+    function addReaction(postId, reactionId) {
+        const user = getCurrentUser();
+        if (!user) return;
+
+        const posts = getPosts();
+        const post = posts.find(p => p.id === postId);
+        if (!post) return;
+
+        // Simple: free reactions for now (we'll add costs later)
+        if (!post.reactions) post.reactions = {};
+        post.reactions[reactionId] = (post.reactions[reactionId] || 0) + 1;
+        savePosts(posts);
+
+        // Tiny reward to author (simulated)
+        if (post.authorHandle !== user.handle) {
+            const users = getUsers();
+            const author = users[post.authorHandle];
+            if (author) {
+                author.balance = +(author.balance + 0.0005).toFixed(4);
+                saveUsers(users);
+            }
+        }
+
+        showToast('Reacted');
+        openPost(postId); // re-render
+    }
+
+    // ===== BOOT =====
+    (function boot() {
+        const handle = getSession();
+        if (handle) {
+            const user = getUsers()[handle];
+            if (user) {
+                enterApp(user);
+                return;
+            }
+        }
+    })();
+</script>
+</body>
+</html>
