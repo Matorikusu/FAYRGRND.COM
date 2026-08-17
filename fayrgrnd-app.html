@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>FAYRGRND</title>
+<style>
+:root {
+  --bg:#0a0b0e; --surface:#12151c; --card:#181c26; --sub:#0f1117;
+  --purple:#8B5CF6; --purple-glow:rgba(139,92,246,0.22);
+  --cyan:#22d3ee; --gold:#fbbf24; --red:#ef4444;
+  --border:rgba(255,255,255,0.08); --text:#F8FAFC; --muted:#94A3B8; --dim:#64748b;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--text);display:flex;justify-content:center;align-items:center;min-height:100vh;-webkit-font-smoothing:antialiased}
+.frame{width:100%;max-width:400px;height:100vh;max-height:860px;background:var(--surface);border:1px solid var(--border);border-radius:24px;overflow:hidden;box-shadow:0 25px 60px rgba(0,0,0,0.8),0 0 40px var(--purple-glow);display:flex;flex-direction:column;position:relative}
+@media(max-width:480px){.frame{height:100vh;max-height:100vh;border-radius:0;border:none}}
+
+.auth{flex:1;display:flex;flex-direction:column;justify-content:center;padding:2rem 1.4rem;background:var(--bg)}
+.auth-logo{text-align:center;margin-bottom:2rem}
+.auth-logo h1{font-size:1.7rem;font-weight:800;letter-spacing:-0.8px}
+.auth-logo h1 span{color:var(--purple)}
+.auth-logo p{font-size:0.8rem;color:var(--muted);margin-top:0.3rem}
+.auth-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.3rem}
+.auth-tabs{display:flex;gap:0.4rem;margin-bottom:1.1rem}
+.auth-tab{flex:1;padding:0.55rem;border:1px solid var(--border);background:var(--sub);color:var(--muted);border-radius:10px;font-weight:600;font-size:0.8rem;cursor:pointer}
+.auth-tab.active{background:var(--purple);border-color:var(--purple);color:#fff}
+.fg{margin-bottom:0.85rem}
+.fg label{display:block;font-size:0.65rem;font-weight:600;color:var(--muted);margin-bottom:0.25rem;text-transform:uppercase;letter-spacing:0.3px}
+.fg input{width:100%;background:var(--sub);border:1px solid var(--border);border-radius:10px;padding:0.65rem 0.8rem;color:var(--text);font-size:0.9rem}
+.fg input:focus{outline:none;border-color:var(--purple)}
+.auth-btn{width:100%;background:var(--purple);color:#fff;border:none;padding:0.8rem;border-radius:12px;font-weight:700;font-size:0.9rem;cursor:pointer;margin-top:0.2rem;box-shadow:0 4px 14px var(--purple-glow)}
+.auth-error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.25);color:#fca5a5;font-size:0.75rem;padding:0.5rem 0.7rem;border-radius:8px;margin-bottom:0.8rem;display:none}
+.auth-hint{text-align:center;font-size:0.7rem;color:var(--dim);margin-top:1rem;line-height:1.4}
+
+.app{display:none;flex-direction:column;height:100%}
+.app.active{display:flex}
+.header{background:rgba(18,21,28,0.94);backdrop-filter:blur(16px);padding:0.65rem 1rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);flex-shrink:0}
+.header-logo{font-weight:800;font-size:0.9rem;letter-spacing:-0.4px}
+.header-logo span{color:var(--purple)}
+.header-right{display:flex;align-items:center;gap:0.4rem}
+.balance{background:var(--sub);border:1px solid var(--border);padding:0.2rem 0.5rem;border-radius:20px;font-size:0.68rem;font-weight:700;color:var(--gold);font-family:monospace}
+.status-pill{font-size:0.58rem;color:var(--cyan);border:1px solid rgba(34,211,238,0.35);padding:2px 6px;border-radius:10px;font-weight:600;font-family:monospace}
+.viewport{flex:1;overflow-y:auto;padding:0.75rem;background:var(--bg)}
+.viewport::-webkit-scrollbar{width:0}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:0.95rem;margin-bottom:0.65rem}
+.card-title{font-size:0.62rem;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem}
+
+.profile-top{text-align:center}
+.avatar-wrap{position:relative;display:inline-block;margin-bottom:0.4rem}
+.avatar{width:84px;height:84px;border-radius:50%;border:2.5px solid var(--gold);background:#1a1a1a center/cover;object-fit:cover;box-shadow:0 0 16px rgba(251,191,36,0.25)}
+.avatar-edit{position:absolute;bottom:0;right:0;width:26px;height:26px;background:var(--purple);border-radius:50%;border:2px solid var(--card);display:flex;align-items:center;justify-content:center;font-size:0.65rem;cursor:pointer;color:#fff}
+.name{font-size:1.2rem;font-weight:800}
+.handle{color:var(--purple);font-size:0.76rem;font-family:monospace;margin-top:2px}
+.badge-row{display:flex;justify-content:center;gap:0.35rem;margin-top:0.35rem;flex-wrap:wrap}
+.badge{font-size:0.6rem;font-weight:700;padding:0.12rem 0.4rem;border-radius:20px;background:rgba(139,92,246,0.15);color:var(--purple)}
+.badge.gold{background:rgba(251,191,36,0.15);color:var(--gold)}
+.stars{font-size:0.9rem;letter-spacing:2px;margin:0.4rem 0 0.1rem}
+.score{font-size:0.68rem;color:var(--muted);margin-bottom:0.4rem}
+.honour{display:flex;align-items:center;gap:7px;font-size:0.55rem;font-weight:700}
+.honour-track{flex:1;height:4px;background:linear-gradient(to right,#ef4444,#f97316,#eab308,#22c55e,#22d3ee);border-radius:2px;position:relative}
+.honour-thumb{position:absolute;left:60%;top:50%;transform:translate(-50%,-50%);width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid var(--cyan);box-shadow:0 0 5px var(--cyan)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0.35rem;margin-top:0.65rem}
+.stat{background:var(--sub);border:1px solid var(--border);border-radius:9px;padding:0.4rem;text-align:center}
+.stat-val{font-size:0.95rem;font-weight:800}
+.stat-label{font-size:0.48rem;color:var(--muted);text-transform:uppercase;margin-top:1px}
+
+.theme-select{width:100%;background:var(--sub);border:1px solid var(--border);border-radius:10px;padding:0.55rem 0.7rem;color:var(--text);font-size:0.85rem}
+.theme-select:focus{outline:none;border-color:var(--purple)}
+.store-link{display:block;text-align:center;font-size:0.72rem;color:var(--purple);font-weight:600;padding:0.35rem 0 0;cursor:pointer}
+.bio{width:100%;background:var(--sub);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:0.6rem;font-size:0.8rem;resize:none;line-height:1.4;min-height:58px}
+.bio:focus{outline:none;border-color:var(--purple)}
+.ach-row{display:flex;justify-content:space-between;align-items:center;padding:0.35rem 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.76rem}
+.ach-row:last-child{border-bottom:none}
+.ach-boxes{display:flex;gap:3px}
+.ach-box{width:13px;height:13px;border-radius:3px;border:1.5px solid rgba(34,211,238,0.4)}
+.ach-box.on{background:var(--cyan);border-color:var(--cyan)}
+
+.btn{width:100%;background:var(--purple);color:#fff;border:none;padding:0.7rem;border-radius:11px;font-weight:700;font-size:0.8rem;cursor:pointer;box-shadow:0 4px 14px var(--purple-glow)}
+.btn.secondary{background:var(--sub);border:1px solid var(--border);box-shadow:none;color:var(--text)}
+.btn.small{padding:0.48rem;font-size:0.72rem}
+.btn.danger{background:#7f1d1d;box-shadow:none}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:0.4rem}
+
+.section-label{font-size:0.62rem;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:var(--muted);margin:0.25rem 0 0.45rem}
+.link-action{font-size:0.78rem;color:var(--purple);font-weight:600;cursor:pointer;padding:0.3rem 0;display:inline-block}
+
+/* Popular posts horizontal */
+.h-scroll{overflow-x:auto;margin:0 -0.75rem 0.7rem;padding:0 0.75rem;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory}
+.h-scroll::-webkit-scrollbar{display:none}
+.h-row{display:flex;gap:0.5rem;width:max-content}
+.pop-post{width:220px;flex-shrink:0;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:0.75rem;scroll-snap-align:start;cursor:pointer}
+.pop-post .pp-crew{font-size:0.6rem;font-weight:700;color:var(--purple);margin-bottom:0.3rem}
+.pop-post .pp-author{font-size:0.75rem;font-weight:700}
+.pop-post .pp-text{font-size:0.78rem;color:var(--muted);margin-top:0.3rem;line-height:1.35;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.pop-post .pp-join{margin-top:0.45rem;font-size:0.68rem;font-weight:700;color:var(--cyan)}
+
+.crew-row{display:flex;align-items:center;justify-content:space-between;padding:0.75rem 0.85rem;background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:0.4rem;cursor:pointer}
+.crew-row .cname{font-weight:700;font-size:0.88rem}
+.crew-row .cmeta{font-size:0.68rem;color:var(--muted);margin-top:2px}
+.crew-row .pill{font-size:0.65rem;font-weight:700;padding:0.25rem 0.55rem;border-radius:20px;border:1px solid rgba(34,211,238,0.3);color:var(--cyan)}
+.crew-row .join{border-color:rgba(139,92,246,0.4);color:var(--purple)}
+
+/* Crew detail - horizontal posts */
+.crew-hero{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:0.95rem;margin-bottom:0.55rem;text-align:center}
+.crew-hero h2{font-size:1.15rem;font-weight:800;text-transform:uppercase;letter-spacing:0.4px}
+.crew-hero .sub{font-size:0.72rem;color:var(--muted);margin-top:0.2rem}
+.crew-hero .req{font-size:0.68rem;color:var(--gold);margin-top:0.3rem;font-weight:600}
+
+.post-h-scroll{overflow-x:auto;margin:0 -0.75rem 0.6rem;padding:0 0.75rem;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory}
+.post-h-scroll::-webkit-scrollbar{display:none}
+.post-h-row{display:flex;gap:0.5rem;width:max-content}
+.crew-post-card{width:260px;flex-shrink:0;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:0.8rem;scroll-snap-align:start;cursor:pointer}
+.crew-post-card .cpc-author{font-weight:700;font-size:0.78rem}
+.crew-post-card .cpc-handle{font-size:0.62rem;color:var(--muted)}
+.crew-post-card .cpc-text{font-size:0.84rem;line-height:1.4;margin:0.4rem 0;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.crew-post-card .cpc-meta{font-size:0.65rem;color:var(--muted)}
+
+/* Full post detail */
+.full-post{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1rem;margin-bottom:0.55rem}
+.fp-crew{font-size:0.65rem;font-weight:700;color:var(--purple);margin-bottom:0.5rem}
+.fp-head{display:flex;align-items:center;gap:0.55rem;margin-bottom:0.6rem}
+.fp-av{width:40px;height:40px;border-radius:50%;background:#2a2a30;border:2px solid var(--gold);flex-shrink:0}
+.fp-name{font-weight:800;font-size:0.9rem}
+.fp-handle{font-size:0.7rem;color:var(--muted)}
+.fp-body{font-size:1rem;line-height:1.5;margin-bottom:0.7rem}
+.fp-sys{font-size:0.6rem;color:var(--dim);margin-bottom:0.4rem}
+
+.post-tabs{display:flex;gap:0.3rem;margin-bottom:0.45rem}
+.post-tab{flex:1;text-align:center;padding:0.42rem;border-radius:8px;font-size:0.72rem;font-weight:700;cursor:pointer;background:var(--sub);color:var(--muted);border:1px solid var(--border)}
+.post-tab.active{background:var(--purple);color:#fff;border-color:var(--purple)}
+.react-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.react-scroll::-webkit-scrollbar{display:none}
+.react-row{display:flex;gap:0.35rem;width:max-content;padding:0.15rem 0}
+.react-btn{background:var(--sub);border:1px solid var(--border);border-radius:20px;padding:0.35rem 0.65rem;font-size:0.72rem;font-weight:600;cursor:pointer;color:var(--text);white-space:nowrap}
+.react-btn.active{border-color:var(--purple);background:rgba(139,92,246,0.18);color:var(--purple)}
+.react-btn .cnt{font-size:0.62rem;color:var(--muted);margin-left:0.2rem}
+.comment-box{display:flex;gap:0.35rem;margin-top:0.4rem}
+.comment-input{flex:1;background:var(--sub);border:1px solid var(--border);border-radius:10px;padding:0.48rem 0.6rem;color:var(--text);font-size:0.8rem}
+.comment-input:focus{outline:none;border-color:var(--purple)}
+.comment{padding:0.4rem 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.8rem}
+.comment:last-child{border-bottom:none}
+.comment-author{font-weight:700;font-size:0.7rem;margin-bottom:0.1rem}
+.comment-text{color:var(--muted);line-height:1.35}
+
+.compose-area{width:100%;background:var(--sub);border:1px solid var(--border);border-radius:11px;color:var(--text);padding:0.7rem;font-size:0.88rem;resize:none;min-height:90px;line-height:1.4}
+.compose-area:focus{outline:none;border-color:var(--purple)}
+.compose-bar{display:flex;justify-content:space-between;align-items:center;margin-top:0.45rem}
+.cost{font-size:0.7rem;color:var(--gold);font-weight:600}
+select.sel{width:100%;background:var(--sub);border:1px solid var(--border);border-radius:10px;padding:0.55rem 0.7rem;color:var(--text);font-size:0.84rem;margin-bottom:0.55rem}
+
+.back{background:none;border:none;color:var(--purple);font-size:0.8rem;font-weight:700;cursor:pointer;margin-bottom:0.5rem}
+.nav{background:rgba(18,21,28,0.96);backdrop-filter:blur(14px);border-top:1px solid var(--border);padding:0.4rem 0.1rem 0.55rem;display:flex;justify-content:space-around;flex-shrink:0}
+.nav-btn{background:none;border:none;color:var(--muted);font-size:0.5rem;font-weight:700;text-transform:uppercase;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;padding:0.15rem 0.4rem}
+.nav-btn .ic{font-size:1.1rem}
+.nav-btn.active{color:var(--purple)}
+.toast{position:absolute;bottom:70px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--card);border:1px solid var(--purple);color:var(--text);padding:0.55rem 0.9rem;border-radius:10px;font-size:0.74rem;font-weight:600;opacity:0;pointer-events:none;transition:all 0.25s;z-index:60;white-space:nowrap;box-shadow:0 8px 20px rgba(0,0,0,0.45)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.hidden{display:none!important}
+.empty{text-align:center;padding:1.4rem 1rem;color:var(--muted);font-size:0.84rem;line-height:1.45}
+.file-input{display:none}
+.star-hero{color:var(--cyan)}
+.star-villain{color:var(--red)}
+.dev-user{display:flex;justify-content:space-between;align-items:center;padding:0.55rem 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.8rem}
+.dev-user:last-child{border-bottom:none}
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="auth" id="auth">
+    <div class="auth-logo"><h1>FAYR<span>GRND</span></h1><p>One human. One account. Real status.</p></div>
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-su" onclick="authTab('su')">Sign Up</button>
+        <button class="auth-tab" id="tab-li" onclick="authTab('li')">Log In</button>
+      </div>
+      <div class="auth-error" id="auth-err"></div>
+      <div id="form-su">
+        <div class="fg"><label>Display Name</label><input id="su-name" placeholder="Your name" maxlength="20"></div>
+        <div class="fg"><label>Handle</label><input id="su-handle" placeholder="handle" maxlength="16"></div>
+        <div class="fg"><label>Password</label><input id="su-pass" type="password" placeholder="••••••••"></div>
+        <button class="auth-btn" onclick="signUp()">Create Account · £1</button>
+      </div>
+      <div id="form-li" class="hidden">
+        <div class="fg"><label>Handle</label><input id="li-handle" placeholder="handle"></div>
+        <div class="fg"><label>Password</label><input id="li-pass" type="password" placeholder="••••••••"></div>
+        <button class="auth-btn" onclick="logIn()">Log In</button>
+        <div style="text-align:center;margin-top:0.8rem">
+          <span class="link-action" onclick="devLogin()">Developer login</span>
+        </div>
+      </div>
+    </div>
+    <div class="auth-hint">Wallet created automatically. Starter fee £1 (simulated).</div>
+  </div>
+
+  <div class="app" id="app">
+    <div class="header">
+      <div class="header-logo">FAYR<span>GRND</span></div>
+      <div class="header-right">
+        <div class="balance" id="bal">£0.00</div>
+        <div class="status-pill">VERIFIED</div>
+      </div>
+    </div>
+    <div class="viewport" id="vp">
+
+      <!-- PROFILE -->
+      <div id="v-profile">
+        <div class="card profile-top" id="profile-card">
+          <div class="avatar-wrap">
+            <img class="avatar" id="avatar" src="" alt="">
+            <div class="avatar-edit" onclick="document.getElementById('avatar-file').click()">✎</div>
+            <input type="file" id="avatar-file" class="file-input" accept="image/*" onchange="uploadAvatar(event)">
+          </div>
+          <div class="name" id="p-name">—</div>
+          <div class="handle" id="p-handle">@—</div>
+          <div class="badge-row" id="badges"></div>
+          <div class="stars" id="p-stars">★ ★ ★ ☆ ☆</div>
+          <div class="score" id="p-score">3.00</div>
+          <div class="honour">
+            <span style="color:var(--red)">VILLAIN</span>
+            <div class="honour-track"><div class="honour-thumb" id="h-thumb"></div></div>
+            <span style="color:var(--cyan)">HERO</span>
+          </div>
+          <div class="stats">
+            <div class="stat"><div class="stat-val" id="s-lu">0</div><div class="stat-label">Link-Ups</div></div>
+            <div class="stat"><div class="stat-val" id="s-ev">0</div><div class="stat-label">Events</div></div>
+            <div class="stat"><div class="stat-val" id="s-cr">0</div><div class="stat-label">Crews</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Theme</div>
+          <select class="theme-select" id="theme-select" onchange="setTheme(this.value)">
+            <option value="default">Default</option>
+            <option value="gold">Founding</option>
+            <option value="cyan">Beta</option>
+            <option value="obsidian">Obsidian</option>
+          </select>
+          <div class="store-link" onclick="toast('Theme Store coming soon')">Store →</div>
+        </div>
+        <div class="card"><div class="card-title">Bio</div><textarea class="bio" id="p-bio" placeholder="Who are you?"></textarea></div>
+        <div class="card"><div class="card-title">Achievements</div><div id="achievements"></div></div>
+        <div class="card"><div class="row2"><button class="btn secondary small" onclick="saveProfile()">Save</button><button class="btn secondary small" onclick="logOut()">Log Out</button></div></div>
+      </div>
+
+      <!-- CREWS (joined only + explore link) -->
+      <div id="v-crews" class="hidden">
+        <div class="section-label">Popular posts</div>
+        <div class="h-scroll"><div class="h-row" id="popular-posts"></div></div>
+
+        <div class="section-label">Your crews</div>
+        <div id="joined-list"></div>
+        <div style="margin:0.5rem 0 0.8rem">
+          <span class="link-action" onclick="show('explore')">Explore crews →</span>
+        </div>
+      </div>
+
+      <!-- EXPLORE -->
+      <div id="v-explore" class="hidden">
+        <button class="back" onclick="show('crews')">← Your crews</button>
+        <div class="section-label">All crews</div>
+        <div id="explore-list"></div>
+      </div>
+
+      <!-- CREW DETAIL -->
+      <div id="v-crew" class="hidden">
+        <button class="back" onclick="show('crews')">← Crews</button>
+        <div class="crew-hero">
+          <h2 id="cd-name">—</h2>
+          <div class="sub" id="cd-meta">—</div>
+          <div class="req" id="cd-req"></div>
+          <div id="cd-join" style="margin-top:0.45rem"></div>
+        </div>
+        <div class="section-label">Posts</div>
+        <div class="post-h-scroll"><div class="post-h-row" id="crew-post-row"></div></div>
+        <div id="crew-posts-fallback"></div>
+        <button class="btn" onclick="openCompose()">Create A Post · £0.003</button>
+      </div>
+
+      <!-- FEED -->
+      <div id="v-feed" class="hidden">
+        <div class="card">
+          <div class="card-title">Feed</div>
+          <div style="font-size:0.72rem;color:var(--muted)">Posts from crews you’ve joined</div>
+        </div>
+        <div id="feed-posts"></div>
+        <button class="btn" style="margin-top:0.3rem" onclick="openCompose()">Create A Post · £0.003</button>
+      </div>
+
+      <!-- COMPOSE -->
+      <div id="v-compose" class="hidden">
+        <button class="back" onclick="closeCompose()">← Back</button>
+        <div class="card">
+          <div class="card-title">New Post</div>
+          <select class="sel" id="compose-target"></select>
+          <textarea class="compose-area" id="compose-text" placeholder="Say something..."></textarea>
+          <div class="compose-bar">
+            <div class="cost">£0.003</div>
+            <button class="btn small" style="width:auto;padding:0.45rem 1rem" onclick="submitPost()">Post</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- POST DETAIL -->
+      <div id="v-post" class="hidden">
+        <button class="back" onclick="closePost()">← Back</button>
+        <div id="post-detail"></div>
+      </div>
+
+      <!-- DEVELOPER -->
+      <div id="v-dev" class="hidden">
+        <div class="card">
+          <div class="card-title">Developer mode</div>
+          <div style="font-size:0.78rem;color:var(--muted);margin-bottom:0.6rem">God controls. Handle with care.</div>
+          <button class="btn secondary small" onclick="seedData()">Re-seed dummy posts</button>
+        </div>
+        <div class="card">
+          <div class="card-title">Users</div>
+          <div id="dev-users"></div>
+        </div>
+        <div class="card">
+          <button class="btn danger small" onclick="wipeAll()">Wipe all data</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="nav" id="main-nav">
+      <button class="nav-btn active" data-v="profile" onclick="show('profile',this)"><span class="ic">●</span>Profile</button>
+      <button class="nav-btn" data-v="feed" onclick="show('feed',this)"><span class="ic">◎</span>Feed</button>
+      <button class="nav-btn" data-v="crews" onclick="show('crews',this)"><span class="ic">▣</span>Crews</button>
+      <button class="nav-btn hidden" id="nav-dev" data-v="dev" onclick="show('dev',this)"><span class="ic">⚙</span>Dev</button>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+</div>
+<script>
+const DB='fg_users', POSTS='fg_posts', SES='fg_ses', COST=0.003;
+const THEMES={default:{a:'#8B5CF6',r:'#8B5CF6'},gold:{a:'#fbbf24',r:'#fbbf24'},cyan:{a:'#22d3ee',r:'#22d3ee'},obsidian:{a:'#64748b',r:'#94a3b8'}};
+const CREWS=[
+  {id:'fitness',name:'Fitness',minStars:3},
+  {id:'cars',name:'Cars',minStars:2},
+  {id:'money',name:'Money',minStars:2},
+  {id:'music',name:'Music',minStars:2},
+  {id:'gaming',name:'Gaming',minStars:2},
+  {id:'stoic',name:'Stoic',minStars:2},
+  {id:'motivation',name:'Motivation',minStars:2}
+];
+const REACTIONS=['Fire','Happy','Sad','Angry','Inspired','Thinking'];
+const ACHIEVEMENTS=[
+  {id:'first_post',name:'Create your first post',stages:1},
+  {id:'commenter',name:'Commenter',stages:3},
+  {id:'reactions',name:'Hella Reactions',stages:3},
+  {id:'crew',name:'Crew Member',stages:1}
+];
+const DUMMY_USERS=[
+  {handle:'henry',name:'Henry',stars:4.2,honour:70},
+  {handle:'steel',name:'SteelFeathers',stars:3.8,honour:55},
+  {handle:'nugget',name:'Nugget',stars:5.0,honour:90},
+  {handle:'maya',name:'Maya',stars:3.5,honour:60},
+  {handle:'jax',name:'Jax',stars:2.8,honour:40}
+];
+const DUMMY_POSTS=[
+  {crew:'fitness',handle:'henry',text:'Did you know chickens can run at speeds up to 9 mph? Come at me bro.'},
+  {crew:'fitness',handle:'steel',text:'Hit a new deadlift PR today. 185kg. Form felt solid.'},
+  {crew:'fitness',handle:'nugget',text:'Consistency beats intensity. Show up even when you don’t feel like it.'},
+  {crew:'fitness',handle:'maya',text:'Morning runs hit different when the air is cold. Who else is out there?'},
+  {crew:'fitness',handle:'jax',text:'Bench press stalling. Any tip that isn’t “eat more”?'},
+  {crew:'cars',handle:'henry',text:'Saw a classic Countach on the road today. Still unreal in person.'},
+  {crew:'cars',handle:'steel',text:'New Lambo rumour floating around. Anyone got details?'},
+  {crew:'cars',handle:'maya',text:'Manual gearbox forever. Fight me.'},
+  {crew:'cars',handle:'jax',text:'Just detailed the project car. Worth every hour.'},
+  {crew:'cars',handle:'nugget',text:'Electric is coming hard. Adapt or get left behind.'},
+  {crew:'money',handle:'henry',text:'Side hustle revenue finally passed the day job this month.'},
+  {crew:'money',handle:'steel',text:'Index funds are boring and that’s exactly why they work.'},
+  {crew:'money',handle:'maya',text:'Cut three subscriptions. Instant extra breathing room.'},
+  {crew:'money',handle:'jax',text:'First property deposit is in sight. Long road but progress is progress.'},
+  {crew:'money',handle:'nugget',text:'Cash flow > ego purchases. Build the base first.'}
+];
+
+let curCrew=null, returnTo='feed', postTab='react', isDev=false;
+
+function users(){try{return JSON.parse(localStorage.getItem(DB)||'{}');}catch{return{}}}
+function saveUsers(u){localStorage.setItem(DB,JSON.stringify(u))}
+function posts(){try{return JSON.parse(localStorage.getItem(POSTS)||'[]');}catch{return[]}}
+function savePosts(p){localStorage.setItem(POSTS,JSON.stringify(p))}
+function ses(){return localStorage.getItem(SES)}
+function setSes(h){localStorage.setItem(SES,h)}
+function clearSes(){localStorage.removeItem(SES)}
+function me(){const h=ses();return h?users()[h]:null}
+function upd(h,d){const u=users();if(u[h]){Object.assign(u[h],d);saveUsers(u)}}
+function wallet(){const c='0123456789abcdef';let a='0x';for(let i=0;i<40;i++)a+=c[Math.floor(Math.random()*16)];return a}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000)}
+function err(m){const e=document.getElementById('auth-err');e.textContent=m;e.style.display='block'}
+function clearErr(){document.getElementById('auth-err').style.display='none'}
+function ago(ts){const s=Math.floor((Date.now()-ts)/1000);if(s<60)return'now';if(s<3600)return Math.floor(s/60)+'m';if(s<86400)return Math.floor(s/3600)+'h';return Math.floor(s/86400)+'d'}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function starStr(n,honour){const s=Math.round(n||3);const cls=(honour||50)>=50?'star-hero':'star-villain';return `<span class="${cls}">${'★ '.repeat(s)}${'☆ '.repeat(5-s)}</span>`}
+function memberCount(crewId){let n=0;const u=users();Object.values(u).forEach(x=>{if((x.crews||[]).includes(crewId))n++});return n}
+
+function authTab(t){clearErr();document.getElementById('tab-su').classList.toggle('active',t==='su');document.getElementById('tab-li').classList.toggle('active',t==='li');document.getElementById('form-su').classList.toggle('hidden',t!=='su');document.getElementById('form-li').classList.toggle('hidden',t!=='li')}
+
+function signUp(){
+  clearErr();
+  const name=document.getElementById('su-name').value.trim();
+  const handle=document.getElementById('su-handle').value.trim().toLowerCase().replace(/[^a-z0-9_]/g,'');
+  const pass=document.getElementById('su-pass').value;
+  if(!name||name.length<2)return err('Name too short');
+  if(!handle||handle.length<3)return err('Handle min 3 chars');
+  if(!pass||pass.length<4)return err('Password min 4 chars');
+  const u=users();
+  if(u[handle])return err('Handle taken');
+  const isFirst=Object.keys(u).filter(h=>!h.startsWith('_')).length===0;
+  const user={handle,name,password:pass,wallet:wallet(),balance:11.00,bio:'',stars:3.0,honour:50,linkups:0,events:0,crews:[],theme:isFirst?'gold':'default',avatar:'',achievements:{},badges:isFirst?['Founding']:['Beta'],myReacts:{},created:Date.now(),dev:false};
+  u[handle]=user;saveUsers(u);setSes(handle);
+  ensureSeed();
+  toast('Account created');enter(user);
+}
+function logIn(){
+  clearErr();
+  const handle=document.getElementById('li-handle').value.trim().toLowerCase();
+  const pass=document.getElementById('li-pass').value;
+  const u=users()[handle];
+  if(!u)return err('Not found');
+  if(u.password!==pass)return err('Wrong password');
+  setSes(handle);toast('Welcome back');enter(u);
+}
+function devLogin(){
+  let u=users();
+  if(!u._dev){
+    u._dev={handle:'_dev',name:'Developer',password:'dev',wallet:wallet(),balance:999,bio:'God mode',stars:5,honour:100,linkups:0,events:0,crews:CREWS.map(c=>c.id),theme:'gold',avatar:'',achievements:{},badges:['Dev'],myReacts:{},created:Date.now(),dev:true};
+    saveUsers(u);
+  }
+  setSes('_dev');
+  ensureSeed();
+  toast('Developer mode');
+  enter(u._dev);
+}
+function logOut(){clearSes();isDev=false;document.getElementById('nav-dev').classList.add('hidden');document.getElementById('app').classList.remove('active');document.getElementById('auth').style.display='flex';toast('Logged out')}
+function enter(user){
+  document.getElementById('auth').style.display='none';
+  document.getElementById('app').classList.add('active');
+  isDev=!!user.dev;
+  document.getElementById('nav-dev').classList.toggle('hidden',!isDev);
+  renderProfile(user);renderCrews();renderFeed();
+  if(isDev)renderDev();
+}
+
+function ensureSeed(){
+  const existing=posts();
+  if(existing.some(p=>p.system))return;
+  seedData(true);
+}
+function seedData(silent){
+  // ensure dummy users exist (not loggable easily)
+  let u=users();
+  DUMMY_USERS.forEach(d=>{
+    if(!u[d.handle]){
+      u[d.handle]={handle:d.handle,name:d.name,password:'x',wallet:wallet(),balance:5,bio:'',stars:d.stars,honour:d.honour,linkups:0,events:0,crews:['fitness','cars','money'],theme:'default',avatar:'',achievements:{},badges:['System'],myReacts:{},created:Date.now()-86400000,system:true};
+    }
+  });
+  saveUsers(u);
+  // add dummy posts if missing
+  let all=posts().filter(p=>!p.system);
+  const now=Date.now();
+  DUMMY_POSTS.forEach((d,i)=>{
+    const du=DUMMY_USERS.find(x=>x.handle===d.handle)||DUMMY_USERS[0];
+    all.push({
+      id:'sys_'+i+'_'+now,
+      handle:d.handle,name:du.name,crew:d.crew,text:d.text,
+      reacts:{},comments:[],at:now-(i*3600000),system:true
+    });
+  });
+  savePosts(all);
+  if(!silent){toast('Dummy data seeded');renderCrews();renderFeed();if(isDev)renderDev()}
+}
+
+function renderProfile(user){
+  document.getElementById('p-name').textContent=user.name;
+  document.getElementById('p-handle').textContent='@'+user.handle;
+  document.getElementById('p-score').textContent=(user.stars||3).toFixed(2);
+  document.getElementById('p-bio').value=user.bio||'';
+  document.getElementById('bal').textContent='£'+(user.balance||0).toFixed(2);
+  document.getElementById('s-lu').textContent=user.linkups||0;
+  document.getElementById('s-ev').textContent=user.events||0;
+  document.getElementById('s-cr').textContent=(user.crews||[]).length;
+  document.getElementById('h-thumb').style.left=Math.min(100,Math.max(0,user.honour||50))+'%';
+  const av=document.getElementById('avatar');
+  if(user.avatar){av.src=user.avatar;av.style.background='none'}else{av.src='';av.style.background='#1a1a1a'}
+  document.getElementById('badges').innerHTML=(user.badges||[]).map(b=>`<span class="badge ${b==='Founding'||b==='Dev'?'gold':''}">${b}</span>`).join('');
+  document.getElementById('p-stars').innerHTML=starStr(user.stars,user.honour);
+  const progress=user.achievements||{};
+  document.getElementById('achievements').innerHTML=ACHIEVEMENTS.map(a=>{const done=progress[a.id]||0;let boxes='';for(let i=0;i<a.stages;i++)boxes+=`<div class="ach-box ${i<done?'on':''}"></div>`;return `<div class="ach-row"><span>${a.name}</span><div class="ach-boxes">${boxes}</div></div>`}).join('');
+  document.getElementById('theme-select').value=user.theme||'default';
+  applyTheme(user.theme||'default');
+}
+function applyTheme(id){const t=THEMES[id]||THEMES.default;const card=document.getElementById('profile-card');const av=document.getElementById('avatar');if(card){card.style.borderColor=t.a;card.style.boxShadow=`0 0 14px ${t.a}30`}if(av){av.style.borderColor=t.r;av.style.boxShadow=`0 0 10px ${t.r}40`}}
+function setTheme(id){const user=me();if(!user)return;upd(user.handle,{theme:id});applyTheme(id);toast('Theme set')}
+function uploadAvatar(e){const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=ev=>{const user=me();if(!user)return;upd(user.handle,{avatar:ev.target.result});renderProfile(me());toast('Photo updated')};reader.readAsDataURL(file)}
+function saveProfile(){const user=me();if(!user)return;upd(user.handle,{bio:document.getElementById('p-bio').value});toast('Saved')}
+
+function show(v,btn){
+  ['profile','crews','explore','crew','feed','compose','post','dev'].forEach(x=>{const el=document.getElementById('v-'+x);if(el)el.classList.toggle('hidden',x!==v)});
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  else{
+    const map={crew:'crews',explore:'crews',compose:'feed',post:'feed'};
+    const nv=map[v]||v;
+    const b=document.querySelector(`.nav-btn[data-v="${nv}"]`);
+    if(b)b.classList.add('active');
+  }
+  if(v==='feed')renderFeed();
+  if(v==='crews')renderCrews();
+  if(v==='explore')renderExplore();
+  if(v==='dev')renderDev();
+}
+
+function renderCrews(){
+  const user=me();
+  const joined=user?.crews||[];
+  const all=posts();
+
+  // Popular posts horizontal (from any crew, system + real)
+  const popular=[...all].sort((a,b)=>b.at-a.at).slice(0,8);
+  const pp=document.getElementById('popular-posts');
+  if(!popular.length)pp.innerHTML='<div class="empty" style="padding:0.8rem;width:200px">No posts yet</div>';
+  else pp.innerHTML=popular.map(p=>{
+    const c=CREWS.find(x=>x.id===p.crew);
+    const isJoined=joined.includes(p.crew);
+    return `<div class="pop-post" onclick="openPost('${p.id}')">
+      <div class="pp-crew">${c?.name||p.crew}</div>
+      <div class="pp-author">${p.name}</div>
+      <div class="pp-text">${esc(p.text)}</div>
+      ${!isJoined?`<div class="pp-join" onclick="event.stopPropagation();toggleJoin('${p.crew}')">Join ${c?.name||''}</div>`:''}
+    </div>`;
+  }).join('');
+
+  // Joined list
+  const jl=document.getElementById('joined-list');
+  if(!joined.length)jl.innerHTML='<div class="empty">No crews yet. Check Popular posts above or Explore.</div>';
+  else jl.innerHTML=joined.map(id=>{
+    const c=CREWS.find(x=>x.id===id);if(!c)return'';
+    const count=all.filter(p=>p.crew===id).length;
+    const members=memberCount(id);
+    return `<div class="crew-row" onclick="openCrew('${id}')">
+      <div><div class="cname">${c.name}</div><div class="cmeta">${count} posts · ${members} members</div></div>
+      <span class="pill">Joined</span>
+    </div>`;
+  }).join('');
+}
+
+function renderExplore(){
+  const user=me();
+  const joined=user?.crews||[];
+  const all=posts();
+  // rank by member count then posts
+  const ranked=[...CREWS].sort((a,b)=>memberCount(b.id)-memberCount(a.id)||all.filter(p=>p.crew===b.id).length-all.filter(p=>p.crew===a.id).length);
+  document.getElementById('explore-list').innerHTML=ranked.map(c=>{
+    const count=all.filter(p=>p.crew===c.id).length;
+    const members=memberCount(c.id);
+    const isJoined=joined.includes(c.id);
+    return `<div class="crew-row" onclick="openCrew('${c.id}')">
+      <div><div class="cname">${c.name}</div><div class="cmeta">${members} members · ${count} posts · ${c.minStars}★ required</div></div>
+      <span class="pill ${isJoined?'':'join'}" onclick="event.stopPropagation();toggleJoin('${c.id}');renderExplore()">${isJoined?'Joined':'Join'}</span>
+    </div>`;
+  }).join('');
+}
+
+function toggleJoin(id){
+  const user=me();if(!user)return;
+  const c=CREWS.find(x=>x.id===id);if(!c)return;
+  let crews=user.crews||[];
+  if(crews.includes(id)){
+    crews=crews.filter(x=>x!==id);
+    upd(user.handle,{crews});
+    toast('Left '+c.name);
+  }else{
+    if((user.stars||3)<c.minStars){toast('Need '+c.minStars+'★ to join');return}
+    crews.push(id);
+    const ach=user.achievements||{};ach.crew=1;
+    upd(user.handle,{crews,achievements:ach});
+    toast('Joined '+c.name);
+  }
+  renderCrews();renderProfile(me());
+  if(curCrew===id)openCrew(id);
+}
+
+function openCrew(id){
+  curCrew=id;
+  const c=CREWS.find(x=>x.id===id);if(!c)return;
+  const user=me();
+  const all=posts().filter(p=>p.crew===id).sort((a,b)=>b.at-a.at);
+  const isJoined=(user?.crews||[]).includes(id);
+  document.getElementById('cd-name').textContent=c.name;
+  document.getElementById('cd-meta').textContent=memberCount(id)+' members · '+all.length+' posts';
+  document.getElementById('cd-req').textContent=c.minStars+'★ to post';
+  document.getElementById('cd-join').innerHTML=isJoined
+    ?`<button class="btn secondary small" style="width:auto;padding:0.4rem 0.85rem" onclick="toggleJoin('${id}')">Leave</button>`
+    :`<button class="btn small" style="width:auto;padding:0.4rem 0.85rem" onclick="toggleJoin('${id}')">Join</button>`;
+
+  // horizontal post cards
+  const row=document.getElementById('crew-post-row');
+  if(!all.length)row.innerHTML='<div class="empty" style="width:200px;padding:1rem">No posts yet</div>';
+  else row.innerHTML=all.map(p=>{
+    const author=users()[p.handle];
+    const total=Object.values(p.reacts||{}).reduce((a,b)=>a+b,0);
+    return `<div class="crew-post-card" onclick="openPost('${p.id}')">
+      ${p.system?'<div class="fp-sys">System</div>':''}
+      <div class="cpc-author">${p.name} ${starStr(author?.stars||3,author?.honour||50)}</div>
+      <div class="cpc-handle">@${p.handle}</div>
+      <div class="cpc-text">${esc(p.text)}</div>
+      <div class="cpc-meta">${total} reactions · ${ago(p.at)}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('crew-posts-fallback').innerHTML='';
+  show('crew');
+}
+
+function renderFeed(){
+  const user=me();
+  const joined=user?.crews||[];
+  if(!joined.length){
+    document.getElementById('feed-posts').innerHTML='<div class="empty">Join a crew to see posts here.<br>Open Crews → Explore or Popular.</div>';
+    return;
+  }
+  const list=posts().filter(p=>joined.includes(p.crew)).sort((a,b)=>b.at-a.at);
+  if(!list.length){document.getElementById('feed-posts').innerHTML='<div class="empty">No posts in your crews yet.</div>';return}
+  document.getElementById('feed-posts').innerHTML=list.map(p=>{
+    const c=CREWS.find(x=>x.id===p.crew);
+    const author=users()[p.handle];
+    const total=Object.values(p.reacts||{}).reduce((a,b)=>a+b,0);
+    return `<div class="card" style="cursor:pointer;padding:0.8rem" onclick="openPost('${p.id}')">
+      <div class="fp-crew">${c?.name||''}</div>
+      <div class="fp-head" style="margin-bottom:0.4rem">
+        <div class="fp-av" style="width:32px;height:32px"></div>
+        <div>
+          <div class="fp-name" style="font-size:0.82rem">${p.name} ${starStr(author?.stars||3,author?.honour||50)}</div>
+          <div class="fp-handle">@${p.handle} · ${ago(p.at)}</div>
+        </div>
+      </div>
+      <div style="font-size:0.88rem;line-height:1.4">${esc(p.text)}</div>
+      <div style="font-size:0.65rem;color:var(--muted);margin-top:0.35rem">${total} reactions · ${(p.comments||[]).length} comments</div>
+    </div>`;
+  }).join('');
+}
+
+function openCompose(){
+  returnTo=curCrew?'crew':'feed';
+  const user=me();
+  const joined=user?.crews||[];
+  const sel=document.getElementById('compose-target');
+  sel.innerHTML='';
+  if(!joined.length){toast('Join a crew first');show('explore');return}
+  joined.forEach(id=>{
+    const c=CREWS.find(x=>x.id===id);if(!c)return;
+    const o=document.createElement('option');
+    o.value=c.id;o.textContent=c.name;
+    if(curCrew===c.id)o.selected=true;
+    sel.appendChild(o);
+  });
+  document.getElementById('compose-text').value='';
+  show('compose');
+}
+function closeCompose(){if(curCrew)openCrew(curCrew);else show(returnTo||'feed')}
+
+function submitPost(){
+  const user=me();if(!user)return;
+  const text=document.getElementById('compose-text').value.trim();
+  if(!text)return toast('Write something');
+  if(user.balance<COST)return toast('Not enough balance');
+  const crew=document.getElementById('compose-target').value;
+  const c=CREWS.find(x=>x.id===crew);
+  if(c&&(user.stars||3)<c.minStars)return toast('Need '+c.minStars+'★ to post');
+  if(!(user.crews||[]).includes(crew))return toast('Join this crew first');
+  user.balance=+(user.balance-COST).toFixed(4);
+  const ach=user.achievements||{};ach.first_post=1;
+  upd(user.handle,{balance:user.balance,achievements:ach});
+  const p={id:'p'+Date.now()+Math.random().toString(36).slice(2,6),handle:user.handle,name:user.name,crew,text,reacts:{},comments:[],at:Date.now()};
+  const all=posts();all.push(p);savePosts(all);
+  document.getElementById('bal').textContent='£'+user.balance.toFixed(2);
+  toast('Posted');
+  curCrew=crew;openCrew(crew);
+}
+
+function openPost(id){
+  returnTo=curCrew?'crew':'feed';
+  const p=posts().find(x=>x.id===id);if(!p)return;
+  const user=me();
+  const c=CREWS.find(x=>x.id===p.crew);
+  const author=users()[p.handle];
+  const myReact=(user?.myReacts||{})[id]||null;
+
+  let html=`<div class="full-post">
+    <div class="fp-crew">${c?.name||p.crew}${p.system?' · System':''}</div>
+    <div class="fp-head">
+      <div class="fp-av"></div>
+      <div>
+        <div class="fp-name">${p.name} ${starStr(author?.stars||3,author?.honour||50)}</div>
+        <div class="fp-handle">@${p.handle} · ${ago(p.at)}</div>
+      </div>
+    </div>
+    <div class="fp-body">${esc(p.text)}</div>
+    <div class="post-tabs">
+      <div class="post-tab ${postTab==='react'?'active':''}" onclick="switchPostTab('react','${id}')">Reactions</div>
+      <div class="post-tab ${postTab==='comments'?'active':''}" onclick="switchPostTab('comments','${id}')">Comments</div>
+    </div>
+    <div id="post-tab-content">`;
+
+  if(postTab==='react'){
+    html+=`<div class="react-scroll"><div class="react-row">`;
+    REACTIONS.forEach(r=>{
+      const n=(p.reacts&&p.reacts[r])||0;
+      html+=`<button class="react-btn ${myReact===r?'active':''}" onclick="react('${id}','${r}')">${r}<span class="cnt">${n||''}</span></button>`;
+    });
+    html+=`</div></div>`;
+  }else{
+    html+=`<div class="comment-box">
+      <input class="comment-input" id="comment-input" placeholder="Write a comment...">
+      <button class="btn small" style="width:auto;padding:0.42rem 0.65rem" onclick="addComment('${id}')">Post</button>
+    </div><div class="comment-list">`;
+    const comments=p.comments||[];
+    if(!comments.length)html+='<div class="empty" style="padding:0.8rem 0">No comments yet</div>';
+    else comments.forEach(cm=>{html+=`<div class="comment"><div class="comment-author">@${cm.handle}</div><div class="comment-text">${esc(cm.text)}</div></div>`});
+    html+=`</div>`;
+  }
+  html+=`</div></div>
+  <button class="btn secondary small" style="margin-bottom:0.4rem" onclick="openCrew('${p.crew}')">Go to ${c?.name||'crew'}</button>
+  <button class="btn" onclick="openCompose()">Create A Post · £0.003</button>`;
+  document.getElementById('post-detail').innerHTML=html;
+  show('post');
+}
+function switchPostTab(t,id){postTab=t;openPost(id)}
+function react(pid,rid){
+  const user=me();if(!user)return;
+  const all=posts();const p=all.find(x=>x.id===pid);if(!p)return;
+  if(!p.reacts)p.reacts={};
+  const myReacts=user.myReacts||{};
+  const prev=myReacts[pid];
+  if(prev&&p.reacts[prev])p.reacts[prev]=Math.max(0,(p.reacts[prev]||0)-1);
+  if(prev===rid)delete myReacts[pid];
+  else{
+    p.reacts[rid]=(p.reacts[rid]||0)+1;
+    myReacts[pid]=rid;
+    if(p.handle!==user.handle){const u=users();if(u[p.handle]){u[p.handle].balance=+(u[p.handle].balance+0.0004).toFixed(4);saveUsers(u)}}
+    const ach=user.achievements||{};ach.reactions=Math.min(3,(ach.reactions||0)+1);upd(user.handle,{achievements:ach});
+  }
+  upd(user.handle,{myReacts});savePosts(all);
+  toast(prev===rid?'Removed':'Reacted');openPost(pid);
+}
+function addComment(pid){
+  const user=me();if(!user)return;
+  const input=document.getElementById('comment-input');
+  const text=(input?.value||'').trim();
+  if(!text)return toast('Write a comment');
+  const all=posts();const p=all.find(x=>x.id===pid);if(!p)return;
+  if(!p.comments)p.comments=[];
+  p.comments.push({handle:user.handle,name:user.name,text,at:Date.now()});
+  savePosts(all);
+  const ach=user.achievements||{};ach.commenter=Math.min(3,(ach.commenter||0)+1);
+  upd(user.handle,{achievements:ach});
+  toast('Commented');postTab='comments';openPost(pid);
+}
+function closePost(){if(curCrew)openCrew(curCrew);else show('feed')}
+
+function renderDev(){
+  const u=users();
+  const list=Object.values(u).filter(x=>x.handle);
+  document.getElementById('dev-users').innerHTML=list.map(x=>`
+    <div class="dev-user">
+      <div>
+        <strong>@${x.handle}</strong> · ${x.name}
+        ${x.system?'<span style="color:var(--dim);font-size:0.65rem"> system</span>':''}
+        ${x.dev?'<span style="color:var(--gold);font-size:0.65rem"> DEV</span>':''}
+        <div style="font-size:0.65rem;color:var(--muted)">£${(x.balance||0).toFixed(2)} · ${(x.crews||[]).length} crews</div>
+      </div>
+      ${x.dev?'':`<button class="btn danger small" style="width:auto;padding:0.3rem 0.55rem" onclick="deleteUser('${x.handle}')">Delete</button>`}
+    </div>
+  `).join('')||'<div class="empty">No users</div>';
+}
+function deleteUser(handle){
+  if(!confirm('Delete @'+handle+'?'))return;
+  const u=users();delete u[handle];saveUsers(u);
+  // remove their posts
+  savePosts(posts().filter(p=>p.handle!==handle));
+  toast('Deleted @'+handle);renderDev();
+}
+function wipeAll(){
+  if(!confirm('Wipe ALL users and posts?'))return;
+  localStorage.removeItem(DB);localStorage.removeItem(POSTS);localStorage.removeItem(SES);
+  toast('Wiped');location.reload();
+}
+
+(function(){
+  const h=ses();
+  if(h){const u=users()[h];if(u){ensureSeed();enter(u);return}}
+})();
+</script>
+</body>
+</html>
